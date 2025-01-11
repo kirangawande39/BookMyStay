@@ -1,0 +1,35 @@
+<% layout('/layouts/boilerplate') -%>
+
+
+<body>
+  <form class="edit-form needs-validation custom-form" action="/listings" method="post" enctype="multipart/form-data" novalidate>
+    <h2 class="form-title">Create New Listing</h2>
+    <div class="form-group mb-3">
+      <input name="listing[title]" placeholder="Enter title" required type="text" class="form-control custom-input">
+      <div class="invalid-feedback">Please enter a title.</div>
+    </div>
+    <div class="form-group mb-3">
+      <input name="listing[image]" type="file" class="form-control custom-input">
+      <div class="invalid-feedback">Upload Image</div>
+    </div>
+    <div class="form-group mb-3">
+      <textarea name="listing[description]" required placeholder="Enter description" class="form-control custom-input" rows="3"></textarea>
+      <div class="invalid-feedback">Please enter a description.</div>
+    </div>
+    <div class="form-group mb-3">
+      <input name="listing[price]" required placeholder="Enter price" type="number" min="0" class="form-control custom-input">
+      <div class="invalid-feedback">Please enter a valid price.</div>
+    </div>
+    <div class="form-group mb-3">
+      <input name="listing[location]" required placeholder="Enter location" type="text" class="form-control custom-input">
+      <div class="invalid-feedback">Please enter a location.</div>
+    </div>
+    <div class="form-group mb-3">
+      <input name="listing[country]" required placeholder="Enter country" type="text" class="form-control custom-input">
+      <div class="invalid-feedback">Please enter a country.</div>
+    </div>
+    <button class="update-btn btn btn-primary custom-btn" type="submit">Add</button>
+  </form>
+  <script src="/js/script.js"></script>
+</body>
+

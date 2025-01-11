@@ -1,0 +1,124 @@
+<% layout('/layouts/boilerplate') -%>
+
+<style>
+  /* General Styling */
+  body {
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    height: 100vh;
+    
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 68vh;
+  }
+
+  .form-container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    transform: scale(0.9);
+    transition: transform 0.3s ease-in-out;
+    flex: 0 0 80%;
+  }
+
+  .form-container:hover {
+    transform: scale(1);
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    color: #4a47a3;
+    animation: fadeIn 1s ease-in-out;
+  }
+
+  .form-control {
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+
+  .form-control:focus {
+    border-color: #6e8efb;
+    box-shadow: 0 0 5px rgba(110, 142, 251, 0.5);
+  }
+
+  button {
+    background: linear-gradient(45deg, #6e8efb, #a777e3);
+    border: none;
+    padding: 0.75rem;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    background: linear-gradient(45deg, #a777e3, #6e8efb);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>
+
+<body>
+  <div class="container">
+    <div class="form-container">
+      <h2 class="text-center mb-4">SignIn</h2>
+      <form id="signupForm" action="/login" method="POST" class="needs-validation" novalidate>
+        <!-- Username -->
+        <div class="mb-3">
+          <label for="username" class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-control"
+            id="username"
+            name="username"
+            placeholder="Enter your username"
+            required
+          >
+          <div class="invalid-feedback">
+            Please provide a username.
+          </div>
+        </div>
+
+        <!-- Password -->
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            id="password"
+            name="password"
+            placeholder="Enter your password"
+            required
+            minlength="6"
+          >
+          <div class="invalid-feedback">
+            Password must be at least 6 characters long.
+          </div>
+        </div>
+
+        <!-- Submit -->
+        <button class="btn btn-primary w-100">Sign In</button>
+      </form>
+    </div>
+  </div>
+</body>

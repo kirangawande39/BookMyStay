@@ -1,0 +1,106 @@
+ <% layout('/layouts/boilerplate') -%>
+<script>
+  const mapToken="<%= process.env.MAP_TOKEN%>"
+  const coordinates=<%- JSON.stringify(singleData.geometry.coordinates) %>
+  const singleData=<%- JSON.stringify(singleData) %>
+  c
+</script>
+ <body>
+
+   <div class="containerr">
+     <div class="image">
+       <img src="<%= singleData.image.url %>" alt="<%= singleData.image.filename %>">
+     </div>
+     <div class="details">
+
+       <h1><%= singleData.title %></h1>
+       <p><b>Owned By: </b> <%= singleData.owner.username %></p>
+       <p><%= singleData.description %></p>
+       <p class="price">Price: &#8377;<%= singleData.price.toLocaleString("en-IN") %></p>
+       <p class="location"><b>Location:</b> <%= singleData.location %>, <%= singleData.country %></p>
+     </div>
+
+     <% if(currUser && currUser._id.equals(singleData.owner._id)) {%>
+     <div class="edit-delete-btn">
+       <div class="button">
+         <a href="/listings/<%= singleData._id %>/edit">Edit Listing</a>
+       </div>
+       <form method="post" action="/listings/<%= singleData._id %>?_method=DELETE">
+         <button class="deletebtn">Delete Listing</button>
+       </form>
+     </div>
+     <% } %>
+
+   </div>
+
+   <div class="containerr ">
+     <hr>
+     <% if(currUser) {%>
+     <h2>Leave a Review</h2>
+     <form class="needs-validation" action="/listings/<%= singleData._id %>/reviews" method="post" novalidate>
+       <div class="mb-3 mt-3 ">
+         <label for="rating">Rating</label>
+         <!-- <input id="dynamicRange" name="review[rating]" class="form-range" type="range" min="1" max="5"> -->
+         <fieldset class="starability-slot">
+           <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+           <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+           <label for="first-rate1" title="Terrible">1 star</label>
+           <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+           <label for="first-rate2" title="Not good">2 stars</label>
+           <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+           <label for="first-rate3" title="Average">3 stars</label>
+           <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+           <label for="first-rate4" title="Very good">4 stars</label>
+           <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+           <label for="first-rate5" title="Amazing">5 stars</label>
+         </fieldset>
+       </div>
+       <div class="mb-3 mt-3">
+         <label for="comment">Comment</label>
+         <textarea placeholder="write comment here..." required class="form-control" name="review[comment]" id="comment"></textarea>
+         <div class="invalid-feedback">Please add a comment.</div>
+       </div>
+       <button class="btn btn-outline-dark btn-sm ">Submit</button>
+     </form>
+
+     <% } %>
+
+     <hr>
+
+     <% if(singleData.reviews.length > 0) { %>
+     <h4>All Comments</h4>
+     <div class="comments-section">
+       <% singleData.reviews.slice().reverse().forEach((review, index) => { %>
+       <!-- Reverse the array -->
+       <div class="comment" data-index="<%= index %>" style="<%= index >= 5 ? 'display: none;' : '' %>">
+         <div class="user-avatar">
+           <img src="https://th.bing.com/th/id/OIP.Crq9sn3Qu3HyHwPJi2zW8QHaHa?rs=1&pid=ImgDetMain" alt="User Avatar">
+         </div><br>
+         <div class="comment-content">
+           <p class="comment-text"><b>@<%= review.author.username %></b></p>
+           <p class="starability-result" data-rating="<%= review.rating %>"><br>
+           <p class="comment-text"><%= review.comment %></p>
+           </p>
+           <form class="mb-1" action="/listings/<%= singleData._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
+             <button class="btn btn-sm btn-dark">Delete</button>
+           </form>
+         </div>
+       </div>
+       <% }); %>
+       <% if (singleData.reviews.length > 5) { %>
+       <button class="btn btn-primary" id="see-more-button">See More</button>
+       <% } %>
+     </div>
+     <% } %>
+
+
+   </div>
+   <div class="containerr">
+    <h4>Explore the World with Our Interactive Map</h4>
+     <div id="map"></div>
+   </div>
+  </div>
+  
+ </body>
+
+ </html>
