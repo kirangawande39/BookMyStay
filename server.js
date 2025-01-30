@@ -13,6 +13,7 @@ const ExpressError = require("./utils/ExpressError.js")
 const listingsRouter=require("./routes/listing.js");
 const reviewsRouter=require("./routes/reviews.js")
 const userRouter=require("./routes/user.js")
+; 
 
 const bookingRoutes = require('./routes/bookings');
 
@@ -116,6 +117,7 @@ app.use("/listings",listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter)
 app.use("/",userRouter)
 app.use('/listings', bookingRoutes);
+
 
 
 
