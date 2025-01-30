@@ -13,7 +13,9 @@ const ExpressError = require("./utils/ExpressError.js")
 const listingsRouter=require("./routes/listing.js");
 const reviewsRouter=require("./routes/reviews.js")
 const userRouter=require("./routes/user.js")
-const bookingRoutes = require('./routes/bookings.js');
+
+const bookingRoutes = require('./routes/bookings');
+
 
 
 
