@@ -6,6 +6,7 @@ body {
 
   height: 100vh;
   margin: 0;
+  
 }
 
 /* Form container styling */
@@ -411,4 +412,29 @@ body {
     width: 90vw;
   }
 }
+
+/* bookings */
+
+
+.booking-form {
+  margin-top: 20px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 5px;
+}
+.booking-form input {
+  display: block;
+  margin-bottom: 10px;
+  width: 100%;
+  padding: 8px;
+}
+.booking-form button {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 10px;
+  width: 100%;
+  cursor: pointer;
+}
+
 

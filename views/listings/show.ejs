@@ -30,7 +30,7 @@
        </form>
      </div>
      <% } %>
-
+    
    </div>
 
    <div class="containerr ">
@@ -61,6 +61,24 @@
          <div class="invalid-feedback">Please add a comment.</div>
        </div>
        <button class="btn btn-outline-dark btn-sm ">Submit</button>
+       
+       <% if (currUser) { %>
+        <div class="booking-form">
+          <h2>Book This Listing</h2>
+          <form action="/listings/<%= singleData._id %>/book" method="POST">
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" name="startDate" required>
+            
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" name="endDate" required>
+      
+            <button type="submit" class="btn btn-primary">Book Now</button>
+          </form>
+        </div>
+      <% } else { %>
+        <p><a href="/login">Log in</a> to book this listing.</p>
+      <% } %>
+      
      </form>
 
      <% } %>
@@ -82,7 +100,9 @@
            <p class="comment-text"><%= review.comment %></p>
            </p>
            <form class="mb-1" action="/listings/<%= singleData._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
+            
              <button class="btn btn-sm btn-dark">Delete</button>
+             
            </form>
          </div>
        </div>

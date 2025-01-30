@@ -13,6 +13,7 @@ const ExpressError = require("./utils/ExpressError.js")
 const listingsRouter=require("./routes/listing.js");
 const reviewsRouter=require("./routes/reviews.js")
 const userRouter=require("./routes/user.js")
+const bookingRoutes = require('./routes/bookings.js');
 
 
 
@@ -112,6 +113,7 @@ app.use((req, res, next) => {
 app.use("/listings",listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter)
 app.use("/",userRouter)
+app.use('/listings', bookingRoutes);
 
 
 
@@ -119,6 +121,7 @@ app.get("/", (req, res) => {
  
     res.send("Hi, root is working");
 })
+
 
 app.listen(port, () => {
     console.log(`Listining port is ${port}`);

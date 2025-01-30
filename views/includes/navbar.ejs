@@ -34,25 +34,24 @@
         <a class="nav-link" href="/listings">All Listing</a>
         <a class="nav-link" href="/listings/new">Add New Listing</a>
       </div>
+
+      
       <div class="navbar-nav ms-auto">
         <form class="d-flex search-form" role="search" id="searchForm">
           <input 
-            
-            
             type="text"
             id="searchBar"
             class="form-control me-2 search-input"
             placeholder="Search listings by title or location..."
             aria-label="Search"
-            
             >
           <button class="btn btn-success search-button" type="submit" id="searchButton">
             <i class="bi bi-search"></i> Search
           </button>
         </form>
-        
-        
       </div>
+
+
       <div class="navbar-nav ms-auto">
         <% if(!currUser) { %>
         <a class="nav-link active" aria-current="page" href="/signup">SingUp</a>
