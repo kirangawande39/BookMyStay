@@ -69,7 +69,7 @@ module.exports.renderUpdateForm = async (req, res) => {
         req.flash('error', ' Listing not found. Unable to delete.');
         res.redirect("/listings")
     }
-    console.log(singleData.image.url)
+    
     let originalImageUrl=singleData.image.url;
     originalImageUrl=originalImageUrl.replace("/upload","/upload/h_100,w_200/e_blur:150");
     res.render("listings/edit.ejs", { singleData,originalImageUrl });

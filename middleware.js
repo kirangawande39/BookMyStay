@@ -84,9 +84,3 @@ module.exports.isLoggedIn = (req, res, next) => {
 
 
 
-module.exports.isOwner = (req, res, next) => {
-    if (!req.user || !req.user.isOwner) {
-        return res.status(403).send("Access Denied! You are not an owner.");
-    }
-    next();
-};

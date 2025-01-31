@@ -9,6 +9,8 @@
  <body>
 
    <div class="containerr">
+
+
      <div class="image">
        <img src="<%= singleData.image.url %>" alt="<%= singleData.image.filename %>">
      </div>
@@ -30,11 +32,30 @@
          <button class="deletebtn">Delete Listing</button>
        </form>
      </div>
-     
+
      <% } %>
 
-   </div>
 
+
+     <% if (currUser && !currUser._id.equals(singleData.owner._id)) { %>
+     <div class="booking-form">
+       <h2>Book This Listing</h2>
+       <form action="/listings/<%= singleData._id %>/book" method="POST">
+         <label for="startDate">Start Date:</label>
+         <input type="date" id="startDate" name="startDate" required>
+
+         <label for="endDate">End Date:</label>
+         <input type="date" id="endDate" name="endDate" required>
+
+         <button type="submit" class="btn btn-primary">Book Now</button>
+       </form>
+     </div>
+     <% } else if (!currUser) { %>
+     <p class="text-center">
+       <a href="/login" class="btn btn-primary">Log in</a> to book this listing.
+     </p>
+     <% } %>
+   </div>
    <div class="containerr ">
      <hr>
      <% if(currUser) {%>
@@ -68,22 +89,13 @@
 
      <% } %>
      <hr>
-     <% if (currUser) { %>
-     <div class="booking-form">
-       <h2>Book This Listing</h2>
-       <form action="/listings/<%= singleData._id %>/book" method="POST">
-         <label for="startDate">Start Date:</label>
-         <input type="date" id="startDate" name="startDate" required>
 
-         <label for="endDate">End Date:</label>
-         <input type="date" id="endDate" name="endDate" required>
 
-         <button type="submit" class="btn btn-primary">Book Now</button>
-       </form>
-     </div>
-     <% } else { %>
-     <p><a href="/login">Log in</a> to book this listing.</p>
+     <% if(currUser && currUser._id.equals(singleData.owner._id)) { %>
+     <a href="/bookings/<%= singleData._id %>" class="btn btn-success">View Booking</a>
      <% } %>
+
+
 
      <hr>
 

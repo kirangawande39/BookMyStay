@@ -1,6 +1,7 @@
 const mongoose=require('mongoose');
 const Review=require("./review.js")
 
+
 const Schema=mongoose.Schema;
 
 const listingSchema=new Schema({
@@ -21,6 +22,8 @@ const listingSchema=new Schema({
             ref:"Review",
         },
     ],
+   
+    
     owner:{
         type:Schema.Types.ObjectId,
         ref:"User",
@@ -36,7 +39,14 @@ const listingSchema=new Schema({
           default:[76.1842,20.5292], // buldhana langtitue and latitute
           required: true
         }
-      }
+      },
+      
+      bookings: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: "Booking",
+        }
+    ],
     
 });
 
