@@ -40,7 +40,7 @@
      <% if (currUser && !currUser._id.equals(singleData.owner._id)) { %>
      <div class="booking-form">
        <h2>Book This Listing</h2>
-       <form action="/listings/<%= singleData._id %>/book" method="POST">
+       <form action="/bookings/<%= singleData._id %>/book" method="POST">
          <label for="startDate">Start Date:</label>
          <input type="date" id="startDate" name="startDate" required>
 
