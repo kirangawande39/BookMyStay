@@ -50,3 +50,5 @@ module.exports.checkLoginAuthintication=async (req, res) => {
         res.redirect("/listings");
     });
 }
+
+

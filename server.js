@@ -14,6 +14,7 @@ const listingsRouter=require("./routes/listing.js");
 const reviewsRouter=require("./routes/reviews.js")
 const userRouter=require("./routes/user.js");
 const bookingRoutes = require("./routes/bookings.js");
+const Booking = require('./models/booking');
 
 
 
@@ -124,8 +125,33 @@ app.get("/", (req, res) => {
     res.send("Hi, root is working");
 })
 
+app.get("/mybookings", async (req, res) => {
+    try {
+        // If user is not logged in, redirect to login page
+        if (!req.user) {
+            return res.redirect("/login");
+        }
 
+        console.log("Logged-in User ID:", req.user.id); // Debugging user ID
 
+        // Fetch bookings where user matches the logged-in user's ID
+        const userBookings = await Booking.find({ user: req.user.id })
+            .populate("listing") // Populate listing details
+            .exec();
+
+        console.log("Fetched Bookings:", userBookings); // Debugging fetched bookings
+
+        if (userBookings.length === 0) {
+            return res.status(404).json({ message: "No bookings found for this user." });
+        }
+
+        // Render EJS page with the bookings and user details
+        res.render("listings/userbookings.ejs", { bookings: userBookings, user: req.user });
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        res.status(500).send("Server Error");
+    }
+});
 
 
 
