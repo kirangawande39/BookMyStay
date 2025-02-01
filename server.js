@@ -13,10 +13,7 @@ const ExpressError = require("./utils/ExpressError.js")
 const listingsRouter=require("./routes/listing.js");
 const reviewsRouter=require("./routes/reviews.js")
 const userRouter=require("./routes/user.js");
-
-const Listing=require("./models/listing.js")
-
-const bookingRoutes = require('./routes/bookings');
+const bookingRoutes = require("./routes/bookings.js");
 
 
 
@@ -117,7 +114,7 @@ app.use((req, res, next) => {
 app.use("/listings",listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter)
 app.use("/",userRouter)
-app.use('/listings', bookingRoutes);
+app.use('/bookings', bookingRoutes);
 
 
 
@@ -127,36 +124,8 @@ app.get("/", (req, res) => {
     res.send("Hi, root is working");
 })
 
-// app.get("/bookings/:id", async (req, res) => {
-//    res.send("hello  i am bookings route")
-// });
 
-app.get("/bookings/:id", async (req, res) => {
-    try {
-        let listingId = req.params.id;
 
-        let singleData = await Listing.findById(listingId)
-            .populate({
-                path: "bookings",
-                populate: { path: "user" }  // ✅ User details ko populate karna
-            })
-            .populate("owner");
-
-        if (!singleData) {
-            req.flash("error", "Listing not found");
-            return res.redirect("/listings");
-        }
-
-       
-
-        res.render("listings/owner.ejs", { singleData });
-
-    } catch (error) {
-        console.error("Error fetching bookings:", error);
-        req.flash("error", "Something went wrong");
-        res.redirect("/listings");
-    }
-});
 
 
 

@@ -52,7 +52,6 @@
             <h4 class="text-primary">Owner Information</h4>
             <p><strong>Name:</strong> <%= singleData.owner.username %></p>
             <p><strong>Email:</strong> <%= singleData.owner.email %></p>
-            <p><strong>Contact:</strong> <%= singleData.owner.phone %></p>
         </div>
 
         <!-- Listing Details -->
@@ -72,7 +71,7 @@
                 <table class="table table-hover align-middle shadow-lg rounded">
                     <thead class="table-dark">
                         <tr>
-                            <th>Booking ID</th>
+                            <th>Sr.No</th>
                             <th>Booked By</th>
                             <th>Email</th>
                             <th>Check-in</th>
@@ -82,9 +81,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% singleData.bookings.forEach(booking => { %>
+                        <% singleData.bookings.forEach((booking,index) => { %>
                             <tr class="bg-white">
-                                <td><%= booking._id %></td>
+                               <td><%= index + 1 %></td>
                                 <td><%= booking.user ? booking.user.username : "Unknown" %></td>
                                 <td><%= booking.user ? booking.user.email : "No Email" %></td>
                                 <td><%= new Date(booking.startDate).toDateString() %></td>
