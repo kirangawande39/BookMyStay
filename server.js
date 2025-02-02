@@ -132,18 +132,20 @@ app.get("/mybookings", async (req, res) => {
             return res.redirect("/login");
         }
 
-        console.log("Logged-in User ID:", req.user.id); // Debugging user ID
+       
 
         // Fetch bookings where user matches the logged-in user's ID
         const userBookings = await Booking.find({ user: req.user.id })
             .populate("listing") // Populate listing details
             .exec();
 
-        console.log("Fetched Bookings:", userBookings); // Debugging fetched bookings
-
-        if (userBookings.length === 0) {
-            return res.status(404).json({ message: "No bookings found for this user." });
-        }
+        
+      
+            if (userBookings.length === 0) {
+                req.flash("error", "No bookings found for this user.");
+                return res.redirect("/listings"); // Redirecting to bookings page
+            }
+        
 
         // Render EJS page with the bookings and user details
         res.render("listings/userbookings.ejs", { bookings: userBookings, user: req.user });
