@@ -9,9 +9,11 @@ module.exports.getBooking = async (req, res) => {
             return res.redirect('/listings');
         }
         const { startDate, endDate } = req.body;
-        // Calculate total price (assuming per-day pricing)
-        const days = Math.ceil((new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24));
-        const totalPrice = days * listing.price;
+
+        // ✅ Fix: Ensure at least 1-day charge and count full endDate
+        let days = Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1;
+
+        const totalPrice = days * listing.price; 
 
         const booking = new Booking({
             user: req.user._id,
