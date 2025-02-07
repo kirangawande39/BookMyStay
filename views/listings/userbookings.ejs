@@ -1,148 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Bookings</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <style>
-        /* General Page Style */
-        body {
-            background: #f1f4f7;
-            font-family: 'Arial', sans-serif;
-        }
+<% layout('/layouts/boilerplate') -%>
 
-        .container {
-            margin-top: 50px;
-        }
-
-        /* Card Styles */
-        .card {
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease-in-out;
-        }
-
-        .card:hover {
-            transform: scale(1.05);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Listing Image */
-        .listing-image {
-            width: 100%;
-            height: 250px;
-            object-fit: cover;
-            border-radius: 12px 0 0 12px;
-        }
-
-        /* Badge Style */
-        .badge {
-            font-weight: bold;
-        }
-
-        .badge.bg-warning {
-            background-color: #f0ad4e !important;
-        }
-
-        .badge.bg-success {
-            background-color: #5cb85c !important;
-        }
-
-        .badge.bg-danger {
-            background-color: #d9534f !important;
-        }
-
-        /* Button Styling */
-        .btn-primary {
-            background-color: #007bff;
-            border-color: #007bff;
-            font-weight: bold;
-        }
-
-        .btn-primary:hover {
-            background-color: #0056b3;
-            border-color: #004085;
-        }
-
-        /* Custom Section Title */
-        h2 {
-            font-weight: bold;
-            font-size: 32px;
-            color: #333;
-            margin-bottom: 20px;
-        }
-
-        .card-body {
-            background: #fff;
-            padding: 25px;
-            border-radius: 0 0 12px 12px;
-        }
-
-      
-      
-       
-
-    
-
-    </style>
-</head>
 <body>
-    <div class="container">
-        <h2 class="mb-4">Hello, <%= user.username %>! Here are your bookings:</h2>
+  <div class="container">
+    <h2 class="mb-4">Hello, <%= user.username %>! Here are your bookings:</h2>
 
-        <% if (bookings.length === 0) { %>
-            <p class="alert alert-warning">You have no bookings yet.</p>
-        <% } else { %>
-            <% bookings.forEach((booking, index) => { %>
-                <div class="card mb-4">
-                    <div class="row g-0">
-                        <!-- Listing Image -->
-                        <div class="col-md-4">
-                            <img src="<%= booking.listing.image.url %>" alt="Listing Image" class="listing-image">
-                        </div>
+    <% if (bookings.length === 0) { %>
+    <p class="alert alert-warning">You have no bookings yet.</p>
+    <% } else { %>
+    <% bookings.forEach((booking, index) => { %>
+    <div class="card mb-4">
+      <div class="row g-0">
+        <!-- Listing Image -->
+        <div class="col-md-4">
+          <img src="<%= booking.listing.image.url %>" alt="Listing Image" class="listing-image">
+        </div>
 
-                        <!-- Booking Details -->
-                        <div class="col-md-8">
-                            <div class="card-body">
-                                <h5 class="card-title"><%= booking.listing.title %></h5>
-                                <p class="card-text"><%= booking.listing.description %></p>
-                                <p class="card-text"><strong>Location:</strong> <%= booking.listing.location %>, <%= booking.listing.country %></p>
-                                <p class="card-text"><strong>Price per Night:</strong> ₹<%= booking.listing.price %></p>
+        <!-- Booking Details -->
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title"><%= booking.listing.title %></h5>
+            <p class="card-text"><%= booking.listing.description %></p>
+            <p class="card-text"><strong>Location:</strong> <%= booking.listing.location %>, <%= booking.listing.country %></p>
+            <p class="card-text"><strong>Price per Night:</strong> ₹<%= booking.listing.price %></p>
 
-                                <p class="card-text"><strong>Booking Dates:</strong> <%= new Date(booking.startDate).toLocaleDateString() %> to <%= new Date(booking.endDate).toLocaleDateString() %></p>
-                                <p class="card-text"><strong>Total Price:</strong> ₹<%= booking.totalPrice %></p>
+            <p class="card-text"><strong>Booking Dates:</strong> <%= new Date(booking.startDate).toLocaleDateString() %> to <%= new Date(booking.endDate).toLocaleDateString() %></p>
+            <p class="card-text"><strong>Total Price:</strong> ₹<%= booking.totalPrice %></p>
 
-                                <!-- Status Badge -->
-                                <% if (booking.status === "Pending") { %>
-                                    <span class="badge bg-warning">Pending</span>
-                                <% } else if (booking.status === "Approved") { %>
-                                    <span class="badge bg-success">Approved</span>
-                                <% } else { %>
-                                    <span class="badge bg-danger">Rejected</span>
-                                <% } %>
+            <!-- Status Badge -->
+            <% if (booking.status === "Pending") { %>
+            <span class="badge bg-warning">Pending</span>
+            <% } else if (booking.status === "Confirmed") { %>
+            <span class="badge bg-success">Approved</span>
+            <% } else { %>
+            <span class="badge bg-danger">Rejected</span>
+            <% } %>
 
-                                <!-- Reviews -->
-                                <div class="reviews">
-                                    <% if (booking.listing.reviews.length === 0) { %>
-                                        <p class="no-reviews">No reviews yet.</p>
-                                    <% } else { %>
-                                        
-                                    <% } %>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <% }) %>
-        <% } %>
+            <!-- Payment Button (Only if Approved) -->
+            <% if (booking.status === "Confirmed") { %>
+            <form action="/create-order" method="post">
+              <button class="btn btn-primary mt-3" type="submit">Pay to Confirm</button>
+            </form>
+            <% } else if (booking.status === "Paid") { %>
+            <span class="badge bg-info">✅ Payment Completed</span>
+            <% } %>
 
-        <a href="/listings" class="btn btn-primary mt-3">Go to Home</a>
+          </div>
+        </div>
+      </div>
     </div>
+    <% }) %>
+    <% } %>
 
-    <!-- Bootstrap JS and Popper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <a href="/listings" class="btn btn-primary mt-3">Go to Home</a>
+  </div>
+
+  <!-- Bootstrap JS and Popper.js -->
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+ 
 </body>
+
 </html>

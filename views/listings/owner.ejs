@@ -81,9 +81,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% singleData.bookings.forEach((booking,index) => { %>
+                        <% singleData.bookings.forEach((booking, index) => { %>
                             <tr class="bg-white">
-                               <td><%= index + 1 %></td>
+                                <td><%= index + 1 %></td>
                                 <td><%= booking.user ? booking.user.username : "Unknown" %></td>
                                 <td><%= booking.user ? booking.user.email : "No Email" %></td>
                                 <td><%= new Date(booking.startDate).toDateString() %></td>
@@ -98,9 +98,18 @@
                                         <span class="badge bg-danger">Cancelled</span>
                                     <% } %>
                                 </td>
+                                <td>
+                                    <% if (booking.status === "Pending") { %>
+                                        <form action="/update-booking/<%= booking._id %>" method="POST">
+                                            <button class="btn btn-success btn-sm" name="status" value="Confirmed">Confirm</button>
+                                            <button class="btn btn-danger btn-sm" name="status" value="Cancelled">Cancel</button>
+                                        </form>
+                                    <% } %>
+                                </td>
                             </tr>
                         <% }); %>
                     </tbody>
+                    
                 </table>
             </div>
         <% } else { %>

@@ -89,14 +89,10 @@
 
      <% } %>
      <hr>
-
-
+     
      <% if(currUser && currUser._id.equals(singleData.owner._id)) { %>
      <a href="/bookings/<%= singleData._id %>" class="btn btn-success">View Booking</a>
      <% } %>
-
-
-
      <hr>
 
      <% if(singleData.reviews.length > 0) { %>

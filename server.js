@@ -15,6 +15,9 @@ const reviewsRouter=require("./routes/reviews.js")
 const userRouter=require("./routes/user.js");
 const bookingRoutes = require("./routes/bookings.js");
 const Booking = require('./models/booking');
+const paymentRoutes = require("./routes/payment.js");
+
+
 
 
 
@@ -109,6 +112,7 @@ app.use((req, res, next) => {
     res.locals.successmsg = req.flash("success");
     res.locals.errormsg = req.flash("error");
     res.locals.currUser = req.user;
+    res.locals.RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID;
     next();
 })
 
@@ -116,7 +120,7 @@ app.use("/listings",listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter)
 app.use("/",userRouter)
 app.use('/bookings', bookingRoutes);
-
+app.use("/", paymentRoutes);
 
 
 
@@ -139,7 +143,7 @@ app.get("/mybookings", async (req, res) => {
             .populate("listing") // Populate listing details
             .exec();
 
-        
+       
       
             if (userBookings.length === 0) {
                 req.flash("error", "No bookings found for this user.");
@@ -156,7 +160,15 @@ app.get("/mybookings", async (req, res) => {
 });
 
 
+app.post('/update-booking/:id', async (req, res) => {
+    const { status } = req.body;
+    await Booking.updateOne({ _id: req.params.id }, { $set: { status } });
+    res.redirect('back'); // Same page pe redirect hoga
+});
 
+app.get("/payment", (req, res) => {
+    res.render("listings/payment.ejs");
+});
 
 
 app.listen(port, () => {
