@@ -21,7 +21,7 @@ module.exports.saveSingupForm=async (req, res,next) => {
                 return next(err);
             }
             req.flash('success', 'Welcome to Wanderlust!')
-            res.redirect("/listings");
+            res.redirect("/explore-rooms");
         })
     }
     catch (err) {
@@ -30,13 +30,14 @@ module.exports.saveSingupForm=async (req, res,next) => {
     }
 }
 
+
 module.exports.renderLoginForm=(req, res) => {
     res.render("./users/login.ejs");
 }
 
 module.exports.checkLoginAuthintication=async (req, res) => {
     req.flash("success","Login Sucessfully");
-    let redirectUrl=res.locals.redirectUrl || "/listings"
+    let redirectUrl=res.locals.redirectUrl || "/explore-rooms"
     res.redirect(redirectUrl);
  }
 
@@ -47,7 +48,7 @@ module.exports.checkLoginAuthintication=async (req, res) => {
             return next(err)
         }
         req.flash("success","logged you out!");
-        res.redirect("/listings");
+        res.redirect("/explore-rooms");
     });
 }
 

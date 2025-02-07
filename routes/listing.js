@@ -21,7 +21,7 @@ router.route("/")
     
 
 // New route (separate for rendering the form)
-router.get("/new", userLoggedIn, ListingController.renderNewForm);
+router.get("/add-room", userLoggedIn, ListingController.renderNewForm);
 
 // Individual listing routes
 router.route("/:id")
@@ -30,6 +30,6 @@ router.route("/:id")
     .delete(userLoggedIn, isOwner, wrapeAsync(ListingController.deleteListing));
 
 // Update route (separate for rendering the edit form)
-router.get("/:id/edit", userLoggedIn, isOwner, wrapeAsync(ListingController.renderUpdateForm));
+router.get("/:id/edit-room", userLoggedIn, isOwner, wrapeAsync(ListingController.renderUpdateForm));
 
 module.exports = router;

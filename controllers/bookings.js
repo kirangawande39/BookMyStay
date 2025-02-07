@@ -6,7 +6,7 @@ module.exports.getBooking = async (req, res) => {
         const listing = await Listing.findById(req.params.id);
         if (!listing) {
             req.flash('error', 'Listing not found');
-            return res.redirect('/listings');
+            return res.redirect('/explore-rooms');
         }
         const { startDate, endDate } = req.body;
 
@@ -30,11 +30,11 @@ module.exports.getBooking = async (req, res) => {
         await listing.save(); // ✅ Step 2: Save the updated listing
 
         req.flash('success', 'Booking successful');
-        res.redirect(`/listings/${listing._id}`);
+        res.redirect(`/explore-rooms/${listing._id}`);
     } catch (error) {
         console.error("Error creating booking:", error);
         req.flash('error', 'Something went wrong');
-        res.redirect('/listings');
+        res.redirect('/explore-rooms');
     }
 }
 
@@ -51,16 +51,16 @@ module.exports.renderBookings=async (req, res) => {
 
         if (!singleData) {
             req.flash("error", "Listing not found");
-            return res.redirect("/listings");
+            return res.redirect("/explore-rooms");
         }
 
        
 
-        res.render("listings/owner.ejs", { singleData });
+        res.render("explore-rooms/owner.ejs", { singleData });
 
     } catch (error) {
         console.error("Error fetching bookings:", error);
         req.flash("error", "Something went wrong");
-        res.redirect("/listings");
+        res.redirect("/explore-rooms");
     }
 }

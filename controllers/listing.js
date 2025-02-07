@@ -8,12 +8,11 @@ const geocodingClient = mbxGeocoding({ accessToken:mapToken});
 
 module.exports.index = async (req, res) => {
     let alldata = await Listing.find();
-
-    res.render("listings/index.ejs", { alldata })
+    res.render("explore-rooms/index.ejs", { alldata })
 }
 
 module.exports.renderNewForm = (req, res) => {
-    res.render("listings/new.ejs");
+    res.render("explore-rooms/add-room.ejs");
 }
 
 module.exports.renderShowForm = async (req, res) => {
@@ -29,10 +28,10 @@ module.exports.renderShowForm = async (req, res) => {
 
     if (!singleData) {
         req.flash('error', ' Listing not found. Unable to delete.');
-        res.redirect("/listings")
+        res.redirect("/explore-rooms")
     }
 
-    res.render("listings/show.ejs", { singleData });
+    res.render("explore-rooms/show.ejs", { singleData });
 }
 
 module.exports.saveNewForm = async (req, res, next) => {
@@ -56,7 +55,7 @@ module.exports.saveNewForm = async (req, res, next) => {
 
     req.flash('success', 'Add Listing sucessfully!');
 
-    res.redirect("/listings")
+    res.redirect("/explore-rooms")
    
 }
 
@@ -67,12 +66,12 @@ module.exports.renderUpdateForm = async (req, res) => {
     // singleData.topReview = singleData.reviews.sort((a, b) => b.rating - a.rating)[0];
     if (!singleData) {
         req.flash('error', ' Listing not found. Unable to delete.');
-        res.redirect("/listings")
+        res.redirect("/explore-rooms")
     }
     
     let originalImageUrl=singleData.image.url;
     originalImageUrl=originalImageUrl.replace("/upload","/upload/h_100,w_200/e_blur:150");
-    res.render("listings/edit.ejs", { singleData,originalImageUrl });
+    res.render("explore-rooms/edit.ejs", { singleData,originalImageUrl });
 }
 
 module.exports.updateListing = async (req, res) => {
@@ -87,7 +86,7 @@ module.exports.updateListing = async (req, res) => {
     }
 
     req.flash('success', 'Update Listing sucessfully!');
-    res.redirect(`/listings/${id}`)
+    res.redirect(`/explore-rooms/${id}`)
 }
 
 module.exports.deleteListing = async (req, res) => {
@@ -95,5 +94,5 @@ module.exports.deleteListing = async (req, res) => {
     let deletedData = await Listing.findByIdAndDelete(id);
     req.flash('success', 'Delete Listing sucessfully!');
 
-    res.redirect("/listings");
+    res.redirect("/explore-rooms");
 }

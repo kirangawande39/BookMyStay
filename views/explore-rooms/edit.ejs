@@ -3,7 +3,7 @@
 
 
 <body>
-  <form class="edit-form needs-validation custom-form" action="/listings/<%= singleData._id %>?_method=PUT" method="post" enctype="multipart/form-data"  novalidate>
+  <form class="edit-form needs-validation custom-form" action="/explore-rooms/<%= singleData._id %>?_method=PUT" method="post" enctype="multipart/form-data"  novalidate>
     <h2 class="form-title">Edit your listing page</h2>
     <div class="form-group mb-3">
       <input name="listing[title]" value="<%= singleData.title %>" placeholder="Enter title" required type="text" class="form-control custom-input">

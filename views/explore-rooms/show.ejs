@@ -26,9 +26,9 @@
      <% if(currUser && currUser._id.equals(singleData.owner._id)) {%>
      <div class="edit-delete-btn">
        <div class="button">
-         <a href="/listings/<%= singleData._id %>/edit">Edit Listing</a>
+         <a href="/explore-rooms/<%= singleData._id %>/edit-room">Edit Listing</a>
        </div>
-       <form method="post" action="/listings/<%= singleData._id %>?_method=DELETE">
+       <form method="post" action="/explore-rooms/<%= singleData._id %>?_method=DELETE">
          <button class="deletebtn">Delete Listing</button>
        </form>
      </div>
@@ -60,7 +60,7 @@
      <hr>
      <% if(currUser) {%>
      <h2>Leave a Review</h2>
-     <form class="needs-validation" action="/listings/<%= singleData._id %>/reviews" method="post" novalidate>
+     <form class="needs-validation" action="/explore-rooms/<%= singleData._id %>/reviews" method="post" novalidate>
        <div class="mb-3 mt-3 ">
          <label for="rating">Rating</label>
          <!-- <input id="dynamicRange" name="review[rating]" class="form-range" type="range" min="1" max="5"> -->
@@ -109,7 +109,7 @@
            <p class="starability-result" data-rating="<%= review.rating %>"><br>
            <p class="comment-text"><%= review.comment %></p>
            </p>
-           <form class="mb-1" action="/listings/<%= singleData._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
+           <form class="mb-1" action="/explore-rooms/<%= singleData._id %>/reviews/<%= review._id %>?_method=DELETE" method="post">
 
              <button class="btn btn-sm btn-dark">Delete</button>
 

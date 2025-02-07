@@ -116,8 +116,8 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use("/listings",listingsRouter);
-app.use("/listings/:id/reviews",reviewsRouter)
+app.use("/explore-rooms",listingsRouter);
+app.use("/explore-rooms/:id/reviews",reviewsRouter)
 app.use("/",userRouter)
 app.use('/bookings', bookingRoutes);
 app.use("/", paymentRoutes);
@@ -147,12 +147,12 @@ app.get("/mybookings", async (req, res) => {
       
             if (userBookings.length === 0) {
                 req.flash("error", "No bookings found for this user.");
-                return res.redirect("/listings"); // Redirecting to bookings page
+                return res.redirect("/explore-rooms"); // Redirecting to bookings page
             }
         
 
         // Render EJS page with the bookings and user details
-        res.render("listings/userbookings.ejs", { bookings: userBookings, user: req.user });
+        res.render("explore-rooms/userbookings.ejs", { bookings: userBookings, user: req.user });
     } catch (error) {
         console.error("Error fetching bookings:", error);
         res.status(500).send("Server Error");
@@ -167,14 +167,19 @@ app.post('/update-booking/:id', async (req, res) => {
 });
 
 app.get("/payment", (req, res) => {
-    res.render("listings/payment.ejs");
+    res.render("explore-rooms/payment.ejs");
 });
 
+app.get("/privacy",(req,res)=>{
+    res.render("explore-rooms/privacy.ejs");
+})
+app.get("/terms",(req,res)=>{
+    res.render("explore-rooms/terms.ejs");
+})
 
 app.listen(port, () => {
     console.log(`Listining port is ${port}`);
 })
-
 
 
 //Not Existing route Error
@@ -185,7 +190,7 @@ app.all("*", (req, res, next) => {
 // Middleware error handaler
 app.use((err, req, res, next) => {
     let { statusCode = 500, ErrorMsg = "Smothing went wrong!" } = err;
-    res.render("listings/error.ejs", { ErrorMsg })
-    // res.status(statusCode).render("listings/error.ejs",{ErrorMsg});
+    res.render("explore-rooms/error.ejs", { ErrorMsg })
+    // res.status(statusCode).render("explore-rooms/error.ejs",{ErrorMsg});
 })
 

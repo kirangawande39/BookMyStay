@@ -2,6 +2,7 @@ const express = require("express");
 const Razorpay = require("razorpay");
 require("dotenv").config();
 const router = express.Router();
+
 const razorpay = new Razorpay({
   key_id: process.env.RAZORPAY_KEY_ID,
   key_secret: process.env.RAZORPAY_KEY_SECRET,
@@ -19,8 +20,8 @@ router.post("/create-order", async (req, res) => {
     const order = await razorpay.orders.create(options);
 
     // res.json(order);
-    console.log(order)
-    res.render('listings/payment.ejs', {order})
+ 
+    res.render('explore-rooms/payment.ejs', {order})
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -46,7 +47,7 @@ router.post("/create-order", async (req, res) => {
 
 
   router.get("/payment-success", (req, res) => {
-    res.render("listings/success", { message: "Your payment was successful!" });
+    res.render("explore-rooms/success", { message: "Your payment was successful!" });
 });
 
 
