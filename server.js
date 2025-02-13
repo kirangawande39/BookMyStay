@@ -2,37 +2,42 @@ if(process.env.NODE_ENV != "production"){
     require("dotenv").config();
 }
 
-const express = require('express');
-const mongoose = require('mongoose');
+// Importing Express to create an HTTP server.
+const express = require('express'); 
+
+// Importing Mongoose to connect with MongoDB.
+const mongoose = require('mongoose'); 
+
 const app = express();
-const port = 3000;
-const path = require('path');
-const methodOverride = require("method-override")
+const port = 3000; 
+const path = require('path'); 
+const methodOverride = require("method-override"); 
 const ejsMate = require("ejs-mate");
-const ExpressError = require("./utils/ExpressError.js")
-const listingsRouter=require("./routes/listing.js");
-const reviewsRouter=require("./routes/reviews.js")
-const userRouter=require("./routes/user.js");
-const bookingRoutes = require("./routes/bookings.js");
-const Booking = require('./models/booking');
-const paymentRoutes = require("./routes/payment.js");
+
+ // Custom error handling class for managing application errors.
+const ExpressError = require("./utils/ExpressError.js");
+const listingsRouter = require("./routes/listing.js"); 
+const reviewsRouter = require("./routes/reviews.js"); 
+const userRouter = require("./routes/user.js"); 
+const bookingRoutes = require("./routes/bookings.js"); 
+const Booking = require('./models/booking'); 
+const paymentRoutes = require("./routes/payment.js"); 
+
+const session = require('express-session'); 
+const MongoStore = require('connect-mongo'); // Using MongoDB to store session data.
+const flash = require('connect-flash'); 
+const passport = require('passport'); // Passport.js for user authentication.
+const LocalStrategy = require('passport-local'); // Local authentication strategy for Passport.
+const User = require("./models/user.js");
+app.use(express.json()); // Middleware to parse incoming JSON data from requests.
+app.use(methodOverride("_method")); // Enables method override, allowing forms to use PUT and DELETE requests.
 
 
 
-
-
-
-const session=require('express-session');
-const MongoStore = require('connect-mongo');
-const flash = require('connect-flash');
-const passport=require('passport')
-const LocalStatergy=require('passport-local');
-const User=require("./models/user.js")
-
-app.use(express.json());
-app.use(methodOverride("_method"));
+// Set EJS as the templating engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
+
 app.use(express.urlencoded({ extended: true }))
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "/public")));
@@ -62,15 +67,23 @@ const sessionOption = {
 
 app.use(session(sessionOption))
 app.use(flash())
+
 // A middleware that initialize password
-app.use(passport.initialize())
+// Initializes Passport for authentication handling.
+app.use(passport.initialize());
 
-app.use(passport.session())
+// Enables persistent login sessions, allowing users to stay logged in across requests.
+app.use(passport.session());
 
-passport.serializeUser(User.serializeUser())
-passport.deserializeUser(User.deserializeUser())
+// Serializes user data to store in the session (converts user object to session ID).
+passport.serializeUser(User.serializeUser()); 
 
-passport.use(new LocalStatergy(User.authenticate()))
+// Deserializes user data (retrieves user details from session ID).
+passport.deserializeUser(User.deserializeUser()); 
+
+// Configures Passport to use the local strategy for username/password authentication.
+passport.use(new LocalStrategy(User.authenticate())); 
+
 
 
 // app.get("/registerUser",async(req,res)=>{
@@ -82,7 +95,6 @@ passport.use(new LocalStatergy(User.authenticate()))
 //   let newUser=await User.register(fakeUser,"password");
 //   res.send(newUser);
 // })
-
 
 
 // const mongodburl = 'mongodb://127.0.0.1:27017/restro_book';

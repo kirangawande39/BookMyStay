@@ -31,7 +31,7 @@ module.exports.isOwner=async(req,res,next)=>{
 
     if(!listing.owner.equals(res.locals.currUser._id)){
          req.flash("error","You are not authorized. You do not have permission to access this resource!")
-         return res.redirect("/listings")
+         return res.redirect("/explore-rooms")
     }
     next()
 }
@@ -70,7 +70,7 @@ module.exports.isreviewAuthor=async(req,res,next)=>{
 
     if(!review.author.equals(res.locals.currUser._id)){
          req.flash("error","You are not authorized to perform this action. You do not have permission to delete this review.")
-         return res.redirect(`/listings/${id}`)
+         return res.redirect(`/explore-rooms/${id}`)
     }
     next()
 }
