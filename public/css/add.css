@@ -1,0 +1,57 @@
+/* General body styling */
+
+  
+  /* Form container styling */
+  .custom-form {
+    background: #fff; /* White background for the form */
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.8s ease; /* Smooth entrance animation */
+  }
+  
+  /* Form title styling */
+  .form-title {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #007bff; /* Primary color */
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+  
+  /* Input field customization */
+  .custom-input {
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 0.75rem;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+  }
+  
+  .custom-input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Focus effect */
+  }
+  
+  /* Button styling */
+  .custom-btn {
+    background: #007bff;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+    display: block;
+    width: 100%;
+  }
+  
+  .custom-btn:hover {
+    background: #0056b3;
+    cursor: pointer;
+  }

@@ -1,0 +1,82 @@
+
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    
+    color: #333;
+  }
+
+  .container {
+    /* max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); */
+    flex: 0 0 80%; 
+    margin-bottom: 30px;
+  }
+
+  h2 {
+    font-size: 1.8rem;
+    color: #444;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  li {
+    margin: 10px 0;
+    font-size: 1.2rem;
+    padding: 10px;
+    background: #f1f1f1;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+
+  li a {
+    text-decoration: none;
+    color: #27ae60;
+    transition: color 0.3s;
+  }
+
+  li:hover {
+    background: #e1e1e1;
+  }
+
+  li a:hover {
+    color: #1e8449;
+  }
+
+  .newlistbtn {
+    text-decoration: none;
+    background: #27ae60;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background 0.3s;
+  }
+
+  .newlistbtn:hover {
+    background-color: #1e8449;
+    cursor: pointer;
+  }
+
+  .card-img-overlay{
+    opacity: 0 !important;
+   color: white;
+   text-align: center;
+   
+  }
+  .card-img-overlay:hover{
+    opacity: 1 !important;
+  }
+  .card-img-overlay h5 span{
+        background-color: #239D3C !important;
+        margin-top: 60px;
+  }

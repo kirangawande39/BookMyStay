@@ -4,6 +4,7 @@ const Review=require("./models/review")
 const { listingSchema } = require("./schema.js")
 const ExpressError = require("./utils/ExpressError.js")
 const { reviewSchema } = require("./schema.js")
+const { bookingSchema } = require("./schema.js")
 
 //check use Login 
 module.exports.userLoggedIn=(req,res,next)=>{
@@ -54,6 +55,18 @@ module.exports.isOwner=async(req,res,next)=>{
 // Review Validation Middleware 
  module.exports.validateReview = (req, res, next) => {
     let { error } = reviewSchema.validate(req.body);
+    if (error) {
+        const errorMessage = error.details.map(detail => detail.message).join(', ');
+        throw new ExpressError(400, errorMessage);
+    }
+    else {
+        next();
+    }
+}
+
+// Bookings Validation Middleware 
+ module.exports.validateBooking = (req, res, next) => {
+    let { error } = bookingSchema.validate(req.body);
     if (error) {
         const errorMessage = error.details.map(detail => detail.message).join(', ');
         throw new ExpressError(400, errorMessage);

@@ -19,3 +19,18 @@ module.exports.reviewSchema=joi.object({
        comment:joi.string().required(),
       }).required()
 })
+
+
+
+
+
+module.exports.bookingSchema= joi.object({
+    user: joi.string().hex().length(24).required(),  // MongoDB ObjectId validation
+    listing: joi.string().hex().length(24).required(),
+    startDate: joi.date().iso().required(),
+    endDate: joi.date().iso().greater(joi.ref('startDate')).required(), // End date must be after start date
+    totalPrice: joi.number().positive().required(),
+    status: joi.string().valid("Pending", "Confirmed", "Cancelled").default("Pending")
+});
+
+
