@@ -136,7 +136,10 @@ app.get("/", (req, res) => {
  
     res.redirect('explore-rooms')
 })
-
+// app.post("/bookings/:id/book",(req,res)=>{
+//     console.log("I am bookings");
+//     console.log(req.params.id)
+// })
 app.get("/mybookings", async (req, res) => {
     try {
         // If user is not logged in, redirect to login page

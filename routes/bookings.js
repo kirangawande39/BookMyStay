@@ -5,8 +5,10 @@ const { userLoggedIn,validateBooking } = require('../middleware.js');
 const BookingControllers = require("../controllers/bookings.js");
 const Booking = require('../models/booking.js');
 
+// router.route('/:id/book')
+//     .post(userLoggedIn,validateBooking, wrapeAsync(BookingControllers.getBooking));
 router.route('/:id/book')
-    .post(userLoggedIn,validateBooking, wrapeAsync(BookingControllers.getBooking));
+    .post(userLoggedIn, wrapeAsync(BookingControllers.getBooking));
 
 
 router.route('/:id')

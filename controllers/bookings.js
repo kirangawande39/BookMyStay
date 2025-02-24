@@ -2,6 +2,8 @@
 const Booking = require('../models/booking');
 const Listing = require('../models/listing');
 module.exports.getBooking = async (req, res) => {
+    // console.log("I am Booking route")
+    // console.log(req.params)
     try {
         const listing = await Listing.findById(req.params.id);
         if (!listing) {
@@ -17,6 +19,7 @@ module.exports.getBooking = async (req, res) => {
 
         const booking = new Booking({
             user: req.user._id,
+
             listing: listing._id,
             startDate,
             endDate,
