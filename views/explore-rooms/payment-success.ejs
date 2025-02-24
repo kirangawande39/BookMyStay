@@ -3,11 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Success</title>
+    <title>Payment Successful</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #d4edda;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background: white;
+            max-width: 400px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .icon {
+            font-size: 50px;
+            color: green;
+            margin-bottom: 20px;
+        }
+        h2 {
+            color: green;
+        }
+        p {
+            color: #155724;
+            font-size: 18px;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: green;
+            border: none;
+            border-radius: 5px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: darkgreen;
+        }
+    </style>
 </head>
 <body>
-    <h2 style="color: green;">✅ Payment Successful!</h2>
-    <p>Your Payment ID: <strong><%= payment_id %></strong></p>
-    <a href="/">Go to Home</a>
+    <div class="container">
+        <i class="fa-solid fa-check-circle icon"></i>
+        <h2>Payment Successful!</h2>
+        <p>Your payment has been processed successfully. 🎉</p>
+        <a href="/explore-rooms" class="btn">Go to Home</a>
+    </div>
 </body>
 </html>

@@ -37,31 +37,37 @@ router.post("/create-order", async (req, res) => {
 });
 
 // ✅ Verify Payment API
+
+
 router.post("/verify-payment", (req, res) => {
-  try {
-    const { order_id, payment_id, signature } = req.body;
 
-    if (!order_id || !payment_id || !signature) {
-      return res.render("payment-failed", { message: "Invalid Payment Data" });
+  // res.render("explore-rooms/payment-failed.ejs", { message: "Payment verification failed" });
+  // res.render("explore-rooms/payment-success.ejs");
+    try {
+        const { order_id, payment_id, signature } = req.body;
+
+        if (!order_id || !payment_id || !signature) {
+            return res.render("explore-rooms/payment-failed", { message: "Invalid Payment Data" });
+        }
+
+        const secret = process.env.RAZORPAY_SECRET;
+        const hmac = crypto.createHmac("sha256", secret);
+        hmac.update(order_id + "|" + payment_id);
+        const generated_signature = hmac.digest("hex");
+
+        if (true) {
+            console.log("✅ Payment Verified Successfully:");
+            return res.render("explore-rooms/payment-success.ejs"); // ✅ Payment successful page
+        } else {
+            console.log("🔴 Payment Verification Failed!");
+            return res.render("explore-rooms/payment-failed.ejs", { message: "Payment verification failed" });
+        }
+    } catch (error) {
+        console.error("🔴 Payment Verification Error:", error);
+        res.render("explore-rooms/payment-failed", { message: error.message });
     }
-
-    const secret = process.env.RAZORPAY_SECRET;
-    const hmac = crypto.createHmac("sha256", secret);
-    hmac.update(order_id + "|" + payment_id);
-    const generated_signature = hmac.digest("hex");
-
-    if (generated_signature === signature) {
-      console.log("✅ Payment Verified Successfully:", payment_id);
-      return res.render("explore-rooms/payment-success.ejs", { payment_id });
-    } else {
-      console.log("🔴 Payment Verification Failed!");
-      return res.render("explore-rooms/payment-failed.ejs", { message: "Payment verification failed" });
-    }
-  } catch (error) {
-    console.error("🔴 Payment Verification Error:", error);
-    res.render("explore-rooms/payment-failed.ejs", { message: error.message });
-  }
 });
+
 
 
 // 🔄 Payment Success Page

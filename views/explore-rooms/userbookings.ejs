@@ -37,7 +37,7 @@
 
             <!-- Payment Button (Only if Approved) -->
             <% if (booking.status === "Confirmed") { %>
-            <form action="localhost:3000/payment" method="post">
+            <form action="/payment" method="get">
               <button class="btn btn-primary mt-3" type="submit">Pay to Confirm</button>
             </form>
             <% } else if (booking.status === "Paid") { %>

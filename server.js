@@ -111,9 +111,6 @@ Main()
 async function Main() {
     await mongoose.connect(mongodb_url)
 }
-app.get("/", (req, res) => {
-    res.send("I am root");
-})
 
 
 //set Messages middleware 
@@ -137,7 +134,7 @@ app.use("/payment", paymentRoutes);
 
 app.get("/", (req, res) => {
  
-    res.render('/explore-rooms/index.ejs')
+    res.redirect('explore-rooms')
 })
 
 app.get("/mybookings", async (req, res) => {
@@ -178,6 +175,7 @@ app.post('/update-booking/:id', async (req, res) => {
 });
 
 app.get("/payment", (req, res) => {
+    // console.log("hello i am payment page")
     res.render("explore-rooms/payment.ejs");
 });
 

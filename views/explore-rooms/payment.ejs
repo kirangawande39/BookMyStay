@@ -3,12 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment Page</title>
+    <title>Complete Your Payment</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+            padding: 50px;
+        }
+        .container {
+            background: white;
+            max-width: 400px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        .icon {
+            font-size: 50px;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+        h1 {
+            color: #343a40;
+            font-size: 24px;
+        }
+        p {
+            color: #6c757d;
+            font-size: 16px;
+        }
+        .btn {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 20px;
+            font-size: 18px;
+            color: white;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-    <h1>Complete Your Payment</h1>
-    <button id="payBtn">Pay Now</button>
+    <div class="container">
+        <i class="fa-solid fa-credit-card icon"></i>
+        <h1>Complete Your Payment</h1>
+        <p>Click the button below to proceed with secure payment.</p>
+        <button id="payBtn" class="btn">Pay Now</button>
+    </div>
 
     <script>
         document.getElementById("payBtn").addEventListener("click", async function() {
@@ -18,7 +67,7 @@
                     headers: { "Content-Type": "application/json" },
                 });
                 const data = await response.json();
-                
+                console.log(data);
                 if (!data.order) {
                     alert("Order creation failed!");
                     return;
@@ -28,33 +77,39 @@
                     key: data.key_id,
                     amount: data.order.amount,
                     currency: "INR",
-                    name: "Your Company",
+                    name: "BookMyStay",
                     description: "Test Transaction",
                     order_id: data.order.id,
                     handler: async function(response) {
-                        const verifyRes = await fetch("/payment/verify-payment", {
-                            method: "POST",
-                            headers: { "Content-Type": "application/json" },
-                            body: JSON.stringify({
-                                order_id: response.razorpay_order_id,
-                                payment_id: response.razorpay_payment_id,
-                                signature: response.razorpay_signature,
-                            })
-                        });
-                        const verifyData = await verifyRes.json();
-                        
-                        if (verifyData.success) {
-                            window.location.href = "/payment-success";
-                        } else {
-                            alert("Payment verification failed!");
+                        try {
+                            const verifyRes = await fetch("/payment/verify-payment", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    order_id: response.razorpay_order_id,
+                                    payment_id: response.razorpay_payment_id,
+                                    signature: response.razorpay_signature,
+                                }),
+                            });
+
+                         const verifyData = await verifyRes.json();
+                         if (verifyData.success) {
+                             alert("Payment successful!");
+                         } else {
+                             alert("Payment failed!");
+                         }
+
+                         
+                        } catch (error) {
+                            console.error("Payment Verification Error:", error);
+                            alert("Something went wrong during verification!");
                         }
                     },
                     prefill: {
-                       "name": "<%= currUser ? currUser.name : '' %>",
-                    "email": "<%= currUser ? currUser.email : '' %>",
-                       
+                        "name": "<%= currUser ? currUser.name : '' %>",
+                        "email": "<%= currUser ? currUser.email : '' %>",
                     },
-                    theme: { color: "#3399cc" }
+                    theme: { color: "#007bff" }
                 };
                 
                 const rzp1 = new Razorpay(options);
