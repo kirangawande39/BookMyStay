@@ -3,95 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Payment</title>
+    <title>Payment Page</title>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Poppins', sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f4;
-            margin: 0;
-        }
-
-        .payment-container {
-            background: #fff;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            max-width: 400px;
-            width: 100%;
-        }
-
-        h2 {
-            margin-bottom: 20px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        p {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #555;
-        }
-
-        .pay-btn {
-            background: #3399cc;
-            color: white;
-            padding: 12px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .pay-btn:hover {
-            background: #2878a8;
-        }
-    </style>
 </head>
 <body>
-    <div class="payment-container">
-        <h2>Pay for Rental Service</h2>
-        <p>Amount: ₹<%= order.amount / 100 %></p> <!-- Amount in Rupees -->
-        <button class="pay-btn" id="pay-btn">Pay Now</button>
-    </div>
+    <h1>Complete Your Payment</h1>
+    <button id="payBtn">Pay Now</button>
 
     <script>
-        document.getElementById("pay-btn").addEventListener("click", function () {
-            const order = <%- JSON.stringify(order) %>; // Order data from backend
-            const razorpayKey = "<%= RAZORPAY_KEY_ID %>"; // Getting API key from backend
+        document.getElementById("payBtn").addEventListener("click", async function() {
+            try {
+                const response = await fetch("/payment/create-order", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                });
+                const data = await response.json();
+                
+                if (!data.order) {
+                    alert("Order creation failed!");
+                    return;
+                }
 
-            const options = {
-                key: razorpayKey, // Razorpay API Key from .env
-                amount: order.amount, // Amount in paisa
-                currency: order.currency,
-                name: "RentSphere",
-                description: "Rental Payment",
-                order_id: order.id, // Order ID from Razorpay
-                handler: function (response) {
-                    // ✅ Payment Successful - Redirect to Success Page
-                    window.location.href = "/payment-success?payment_id=" + response.razorpay_payment_id;
-                },
-                prefill: {
-                    name: "kiran gawande",
-                    email: "kirangawande9307@gmail.com",
-                    contact: "9307941288",
-                },
-                theme: {
-                    color: "#3399cc",
-                },
-            };
-
-            const rzp = new Razorpay(options);
-            rzp.open();
+                const options = {
+                    key: data.key_id,
+                    amount: data.order.amount,
+                    currency: "INR",
+                    name: "Your Company",
+                    description: "Test Transaction",
+                    order_id: data.order.id,
+                    handler: async function(response) {
+                        const verifyRes = await fetch("/payment/verify-payment", {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json" },
+                            body: JSON.stringify({
+                                order_id: response.razorpay_order_id,
+                                payment_id: response.razorpay_payment_id,
+                                signature: response.razorpay_signature,
+                            })
+                        });
+                        const verifyData = await verifyRes.json();
+                        
+                        if (verifyData.success) {
+                            window.location.href = "/payment-success";
+                        } else {
+                            alert("Payment verification failed!");
+                        }
+                    },
+                    prefill: {
+                       "name": "<%= currUser ? currUser.name : '' %>",
+                    "email": "<%= currUser ? currUser.email : '' %>",
+                       
+                    },
+                    theme: { color: "#3399cc" }
+                };
+                
+                const rzp1 = new Razorpay(options);
+                rzp1.open();
+            } catch (error) {
+                console.error("Payment Error:", error);
+                alert("Something went wrong!");
+            }
         });
     </script>
 </body>

@@ -7,7 +7,7 @@ const express = require('express');
 
 // Importing Mongoose to connect with MongoDB.
 const mongoose = require('mongoose'); 
-
+const razorpay=require('razorpay')
 const app = express();
 const port = 3000; 
 const path = require('path'); 
@@ -21,8 +21,8 @@ const reviewsRouter = require("./routes/reviews.js");
 const userRouter = require("./routes/user.js"); 
 const bookingRoutes = require("./routes/bookings.js"); 
 const Booking = require('./models/booking'); 
-const paymentRoutes = require("./routes/payment.js"); 
 
+const paymentRoutes = require("./routes/payment.js");
 const session = require('express-session'); 
 const MongoStore = require('connect-mongo'); // Using MongoDB to store session data.
 const flash = require('connect-flash'); 
@@ -109,10 +109,7 @@ Main()
 })
 
 async function Main() {
-    await mongoose.connect(mongodb_url, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    })
+    await mongoose.connect(mongodb_url)
 }
 app.get("/", (req, res) => {
     res.send("I am root");
@@ -124,7 +121,7 @@ app.use((req, res, next) => {
     res.locals.successmsg = req.flash("success");
     res.locals.errormsg = req.flash("error");
     res.locals.currUser = req.user;
-    res.locals.RAZORPAY_KEY_ID = process.env.RAZORPAY_KEY_ID;
+    res.locals.RAZORPAY_ID = process.env.RAZORPAY_ID;
     next();
 })
 
@@ -132,13 +129,15 @@ app.use("/explore-rooms",listingsRouter);
 app.use("/explore-rooms/:id/reviews",reviewsRouter)
 app.use("/",userRouter)
 app.use('/bookings', bookingRoutes);
-app.use("/", paymentRoutes);
+// app.use("/", paymentRoutes);
+
+app.use("/payment", paymentRoutes);
 
 
 
 app.get("/", (req, res) => {
  
-    res.send("Hi, root is working");
+    res.render('/explore-rooms/index.ejs')
 })
 
 app.get("/mybookings", async (req, res) => {
@@ -181,6 +180,7 @@ app.post('/update-booking/:id', async (req, res) => {
 app.get("/payment", (req, res) => {
     res.render("explore-rooms/payment.ejs");
 });
+
 
 app.get("/privacy",(req,res)=>{
     res.render("explore-rooms/privacy.ejs");
