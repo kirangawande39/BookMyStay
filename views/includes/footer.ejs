@@ -1,33 +1,90 @@
-  <style>
-    footer {
-     top: 1000px;
-    }
-    .footer-info{
-      display: flex;
-       justify-content: space-between;
-    }
+<style>
+  /* Overall Page Styling */
+  html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
 
-  </style>
-  <footer style="background-color: rgb(221, 218, 218); color: blanco; padding: 20px; text-align: center;  flex:1 !important; ">
-    <div class="footer-info" style="max-width: 800px; margin: 0 auto;">
-      <div class="footer-logo" style="margin-bottom: 10px;">
+  /* Main content should push the footer down */
+  .content {
+    flex-grow: 1;
+    display: none;
+  }
+
+  /* Footer Styling */
+  footer {
+    background-color: #008080; /* Teal Theme */
+    color: white;
+    padding: 20px;
+    text-align: center;
+    width: 100%;
+    margin-top: auto; /* Footer stays at the bottom */
+  }
+
+  .footer-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+  }
+
+  .footer-logo i,
+  .footer-link a {
+    font-size: 24px;
+    margin: 0 10px;
+    color: white;
+    text-decoration: none;
+  }
+
+  .footer-company-content h3 {
+    font-size: 18px;
+    margin: 0;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .footer-info {
+      flex-direction: column;
+      text-align: center;
+    }
+    .footer-logo, .footer-company-content, .footer-link {
+      margin-bottom: 10px;
+    }
+  }
+</style>
+
+<body>
+
+  <!-- Main Content -->
+  <div class="content">
+    <h2 style="text-align: center;">Welcome to BookMyStay</h2>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-info">
+      <div class="footer-logo">
         <a href="https://www.instagram.com/kiran.gawande.7921/">
-          <i class="fa-brands fa-instagram" style="margin: 0 10px; font-size: 24px; color: blanco;"></i>
+          <i class="fa-brands fa-instagram"></i>
         </a>
-        <i class="fa-brands fa-linkedin" style="margin: 0 10px; font-size: 24px; color: blanco;"></i>
-        <i class="fa-brands fa-twitter" style="margin: 0 10px; font-size: 24px; color: blanco;"></i>
+        <i class="fa-brands fa-linkedin"></i>
+        <i class="fa-brands fa-twitter"></i>
         <a href="https://github.com/kirangawande39">
-          <i class="fa-brands fa-square-github" style="margin: 0 10px; font-size: 24px; color: blanco; "></i>
-
+          <i class="fa-brands fa-square-github"></i>
         </a>
-        </div>
-      <div class="footer-company-content" style="margin-bottom: 10px;">
-        <h3 style="margin: 0; font-size: 18px;"> &copy;
-          Wandarlust Private Limited</h3>
       </div>
-      <div class="footer-link" style="margin-bottom: 10px;">
-        <a href="/privacy" style="color: blanco; text-decoration: none; margin: 0 10px;">Privacy</a>
-        <a href="/terms" style="color: blanco; text-decoration: none; margin: 0 10px;">Térms</a>
+      <div class="footer-company-content">
+        <h3>&copy; BookMyStay Private Limited</h3>
+      </div>
+      <div class="footer-link">
+        <a href="/privacy">Privacy</a>
+        <a href="/terms">Terms</a>
       </div>
     </div>
   </footer>
+
+</body>

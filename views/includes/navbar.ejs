@@ -1,99 +1,154 @@
 <style>
-
-
-
-/* Mobile responsiveness */
-@media (max-width: 768px) {
-  .search-form {
-    flex-direction: column;
-    gap: 10px;
+  /* Navbar Styling */
+  .navbar {
+      background: white;
+      box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
   }
-  .search-input, .search-button {
-    width: 100%;
+  
+  /* Navbar Brand Icon */
+  .navbar-brand i {
+      font-size: 28px;
+      color: #008080; /* Teal */
   }
-}
-#searchBar{
-  width: 300px;
-}
-#searchButton{
-  background-color: brown;
-}
-</style>
+  
+  /* Navbar Links */
+  .navbar-nav .nav-link {
+      color: #333;
+      font-weight: 600;
+      padding: 8px 15px;
+      transition: color 0.3s ease;
+  }
+  
+  .navbar-nav .nav-link:hover {
+      color: #008080;
+  }
+  
+  /* Search Bar */
+  #searchForm {
+      display: flex;
+      align-items: center;
+      border-radius: 50px;
+      padding: 5px 15px;
+      border: 1px solid #ddd;
+      background: white;
+  }
+  
+  #searchBar {
+      border: none;
+      outline: none;
+      font-size: 16px;
+      padding: 8px;
+      width: 250px;
+      border-radius: 50px;
+  }
+  
+  #searchButton {
+      background-color: #008080;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+  }
+  
+  #searchButton:hover {
+      background-color: #005f5f;
+  }
+  
+  /* Profile Dropdown */
+  .dropdown-toggle {
+      color: #333;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+  }
+  
+  .dropdown-menu {
+      background: #f8f9fa;
+      border-radius: 8px;
+      min-width: 160px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .dropdown-item {
+      color: #333;
+      padding: 10px 15px;
+      transition: background 0.3s ease;
+  }
+  
+  .dropdown-item:hover {
+      background: #008080;
+      color: white;
+  }
+  
+  .dropdown-divider {
+      border-color: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Mobile responsiveness */
+  @media (max-width: 768px) {
+      .search-form {
+          flex-direction: column;
+          gap: 10px;
+      }
+      .search-input, .search-button {
+          width: 100%;
+      }
+  }
 
-<nav class="navbar navbar-expand-lg sticky-top bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">
-      <i style="color: brown;" class="fa-brands fa-square-pied-piper"></i>
-    </a>
-    <button class="navbar-toggler custom-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-      <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#">Home</a>
-        <a class="nav-link" href="/explore-rooms">All Listing</a>
-        <a class="nav-link" href="/explore-rooms/add-room">Add New Listing</a>
-      
+
+  </style>
+  
+  <nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <i class="fa-brands fa-square-pied-piper"></i>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link active" href="#">Home</a>
+          <a class="nav-link" href="/explore-rooms">All Listings</a>
+          <a class="nav-link" href="/explore-rooms/add-room">Add New Listing</a>
+        </div>
+  
+        <!-- Search Bar -->
+        <div class="navbar-nav ms-auto">
+          <form class="d-flex search-form" id="searchForm">
+            <input type="text" id="searchBar" class="form-control me-2 search-input" placeholder="Search by title or location...">
+            <button class="btn search-button" type="submit" id="searchButton">
+              <i class="bi bi-search"></i> Search
+            </button>
+          </form>
+        </div>
+  
+
+
+        <!-- Authentication -->
+        <div class="navbar-nav ms-auto">
+          <% if (!currUser) { %>
+              <a class="nav-link" href="/signup">Sign Up</a>
+              <a class="nav-link" href="/login">Log In</a>
+          <% } else { %>
+              <div class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown">
+                      <i class="fa-solid fa-user"></i>
+                  </a>
+                  <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown">
+                      <li><a class="dropdown-item" href="/mybookings">My Bookings</a></li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><a class="dropdown-item" href="/logout">Log Out</a></li>
+                  </ul>
+              </div>
+          <% } %>
+        </div>
       </div>
-
-      
-      <div class="navbar-nav ms-auto">
-        <form class="d-flex search-form" role="search" id="searchForm">
-          <input 
-            type="text"
-            id="searchBar"
-            class="form-control me-2 search-input"
-            placeholder="Search explore-rooms by title or location..."
-            aria-label="Search"
-            >
-          <button class="btn btn-success search-button" type="submit" id="searchButton">
-            <i class="bi bi-search"></i> Search
-          </button>
-        </form>
-      </div>
-
-      <div class="navbar-nav ms-auto">
-        <% if (!currUser) { %>
-            <a class="nav-link active" aria-current="page" href="/signup" 
-                style="color: #333; font-weight: bold; margin-right: 10px; text-decoration: none; transition: color 0.3s ease;">
-                SignUp
-            </a>
-            <a class="nav-link" href="/login" 
-                style="color: #333; font-weight: bold; text-decoration: none; transition: color 0.3s ease;">
-                LogIn
-            </a>
-        <% } else { %>
-            <div class="nav-item dropdown" style="position: relative;">
-                <a class="nav-link dropdown-toggle" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"
-                    style="color: #333; font-size: 20px; cursor: pointer; display: flex; align-items: center; gap: 5px; transition: transform 0.3s ease;">
-                    <i class="fa-solid fa-user" style="font-size: 24px; color: #333;"></i>
-                </a>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="profileDropdown" 
-                    style="background: #f8f9fa; border-radius: 8px; min-width: 150px; box-shadow: 0px 4px 8px rgba(0,0,0,0.1);">
-                    
-                    <li><a class="dropdown-item" href="/mybookings" 
-                        style="color: #333; padding: 10px 15px; transition: background 0.3s ease;">
-                        My Bookings
-                    </a></li>
-                   
-                    
-                    <li><hr class="dropdown-divider" style="border-color: rgba(0, 0, 0, 0.1);"></li>
-                    
-                    <li><a class="dropdown-item" href="/logout" 
-                        style="color: #d9534f; font-weight: bold; padding: 10px 15px; transition: background 0.3s ease;">
-                        LogOut
-                    </a></li>
-                </ul>
-            </div>
-        <% } %>
     </div>
-    
-    
-    
-    </div>
-  </div>
-</nav>
-
- 
-
-     
+  </nav>
+  
