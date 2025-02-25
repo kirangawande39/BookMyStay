@@ -4,57 +4,98 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Payment Successful</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #d4edda;
-            text-align: center;
-            padding: 50px;
+            background-color: #f8f9fa;
         }
-        .container {
+        .success-container {
+            max-width: 600px;
+            margin: 50px auto;
             background: white;
-            max-width: 400px;
-            margin: auto;
-            padding: 30px;
+            padding: 25px;
             border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
         }
-        .icon {
-            font-size: 50px;
-            color: green;
-            margin-bottom: 20px;
-        }
-        h2 {
+        .success-title {
+            font-size: 24px;
+            font-weight: bold;
             color: green;
         }
-        p {
-            color: #155724;
-            font-size: 18px;
+        .card {
+            text-align: left;
+            margin-top: 15px;
         }
-        .btn {
-            display: inline-block;
+        .btn-container {
             margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 16px;
-            color: white;
-            background-color: green;
-            border: none;
-            border-radius: 5px;
-            text-decoration: none;
-            transition: 0.3s;
         }
-        .btn:hover {
-            background-color: darkgreen;
+        .btn-primary, .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            cursor: pointer;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+            border: none;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+        .btn-secondary {
+            background-color: #28a745;
+            color: white;
+            border: none;
+        }
+        .btn-secondary:hover {
+            background-color: #218838;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <i class="fa-solid fa-check-circle icon"></i>
-        <h2>Payment Successful!</h2>
-        <p>Your payment has been processed successfully. 🎉</p>
-        <a href="/explore-rooms" class="btn">Go to Home</a>
+
+<div class="success-container" id="receipt">
+    <h2 class="success-title">Payment Successful</h2>
+    <p>Thank you, <strong><%= booking.user.username %></strong>. Your booking has been confirmed.</p>
+
+    <div class="card">
+        <div class="card-body">
+            <h4 class="card-title"><%= booking.listing.title %></h4>
+            <p class="card-text"><strong>Location:</strong> <%= booking.listing.location %></p>
+            <p class="card-text"><strong>Price per Night:</strong> ₹<%= booking.listing.price %></p>
+            <p class="card-text"><strong>Booking Dates:</strong> <%= new Date(booking.startDate).toLocaleDateString() %> to <%= new Date(booking.endDate).toLocaleDateString() %></p>
+            <p class="card-text"><strong>Total Paid:</strong> ₹<%= booking.totalPrice %></p>
+            <p class="text-success"><strong>Status:</strong> <%= booking.status %></p>
+        </div>
     </div>
+
+    <div class="btn-container">
+        <button class="btn-primary" onclick="downloadReceipt()">Download Receipt</button>
+        <a href="/explore-rooms" class="btn-secondary">Go to Home</a>
+    </div>
+</div>
+
+<script>
+    function downloadReceipt() {
+        const element = document.getElementById("receipt");
+        html2pdf(element, {
+            margin: 10,
+            filename: 'Booking_Receipt.pdf',
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { format: 'a4', orientation: 'portrait' }
+        });
+    }
+</script>
+
 </body>
 </html>

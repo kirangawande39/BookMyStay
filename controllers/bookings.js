@@ -2,24 +2,44 @@
 const Booking = require('../models/booking');
 const Listing = require('../models/listing');
 module.exports.getBooking = async (req, res) => {
-    // console.log("I am Booking route")
-    // console.log(req.params)
     try {
         const listing = await Listing.findById(req.params.id);
         if (!listing) {
             req.flash('error', 'Listing not found');
             return res.redirect('/explore-rooms');
         }
+
         const { startDate, endDate } = req.body;
 
-        // ✅ Fix: Ensure at least 1-day charge and count full endDate
-        let days = Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / (1000 * 60 * 60 * 24)) + 1;
+        // ✅ Validate Dates
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const today = new Date();
 
-        const totalPrice = days * listing.price; 
+        if (isNaN(start) || isNaN(end)) {
+            req.flash('error', 'Invalid dates selected');
+            return res.redirect('/explore-rooms');
+        }
 
+        if (start < today) {
+            req.flash('error', 'Start date cannot be in the past');
+            return res.redirect('/explore-rooms');
+        }
+
+        if (end < start) {
+            req.flash('error', 'End date cannot be before the start date');
+            return res.redirect('/explore-rooms');
+        }
+
+        // ✅ Ensure at least 1-day charge
+        let days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24));
+        if (days === 0) days = 1; // Minimum 1-day charge
+
+        const totalPrice = days * listing.price;
+
+        // ✅ Create Booking
         const booking = new Booking({
             user: req.user._id,
-
             listing: listing._id,
             startDate,
             endDate,
@@ -39,7 +59,8 @@ module.exports.getBooking = async (req, res) => {
         req.flash('error', 'Something went wrong');
         res.redirect('/explore-rooms');
     }
-}
+};
+
 
 module.exports.renderBookings=async (req, res) => {
     try {

@@ -131,9 +131,32 @@ app.use('/bookings', bookingRoutes);
 app.use("/payment", paymentRoutes);
 
 
-app.get("/payment-success", (req, res) => {
-    res.render("explore-rooms/success.ejs");
+app.get("/payment-success", async (req, res) => {
+    try {
+        const { bookingId } = req.query;  
+        
+        // Booking को Find करके Status को "Paid" में Update करो
+        const booking = await Booking.findByIdAndUpdate(
+            bookingId,
+            { status: "Paid" }, // अपडेट फील्ड
+            { new: true } // Updated document return करेगा
+        )
+        .populate("user", "username email")
+        .populate("listing", "title price location")
+        .exec();
+
+        if (!booking) {
+            return res.status(404).send("Booking Not Found!");
+        }
+
+        res.render("explore-rooms/success.ejs", { booking });
+
+    } catch (error) {
+        console.error("Error updating booking status:", error);
+        res.status(500).send("Internal Server Error");
+    }
 });
+
 
 app.get("/payment-failed", (req, res) => {
     res.render("explore-rooms/failed.ejs", { message: "Your transaction could not be completed." });
@@ -183,10 +206,10 @@ app.post('/update-booking/:id', async (req, res) => {
     res.redirect('back'); // Same page pe redirect hoga
 });
 
-app.get("/payment", (req, res) => {
-    // console.log("hello i am payment page")
-    res.render("explore-rooms/payment.ejs");
-});
+// app.get("/payment", (req, res) => {
+//     // console.log("hello i am payment page")
+//     res.render("explore-rooms/payment.ejs");
+// });
 
 
 app.get("/privacy",(req,res)=>{
