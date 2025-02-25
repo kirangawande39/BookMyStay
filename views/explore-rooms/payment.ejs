@@ -62,19 +62,21 @@
     <script>
         document.getElementById("payBtn").addEventListener("click", async function() {
             try {
+                // 🟢 Create Order from Backend
                 const response = await fetch("/payment/create-order", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                 });
                 const data = await response.json();
-                console.log(data);
+                
                 if (!data.order) {
                     alert("Order creation failed!");
                     return;
                 }
 
+                // 🔵 Razorpay Options
                 const options = {
-                    key: data.key_id,
+                    key: data.key_id,  // Razorpay Key
                     amount: data.order.amount,
                     currency: "INR",
                     name: "BookMyStay",
@@ -82,6 +84,7 @@
                     order_id: data.order.id,
                     handler: async function(response) {
                         try {
+                            // 🟠 Verify Payment
                             const verifyRes = await fetch("/payment/verify-payment", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
@@ -92,26 +95,24 @@
                                 }),
                             });
 
-                         const verifyData = await verifyRes.json();
-                         if (verifyData.success) {
-                             alert("Payment successful!");
-                         } else {
-                             alert("Payment failed!");
-                         }
-
-                         
+                            const verifyData = await verifyRes.json();
+                            if (verifyData.success) {
+                                window.location.href = "/payment-success";
+                            } else {
+                                window.location.href = "/payment-failed";
+                            }
                         } catch (error) {
                             console.error("Payment Verification Error:", error);
                             alert("Something went wrong during verification!");
                         }
                     },
                     prefill: {
-                        "name": "<%= currUser ? currUser.name : '' %>",
-                        "email": "<%= currUser ? currUser.email : '' %>",
+                        name: "<%= currUser ? currUser.name : '' %>",
+                        email: "<%= currUser ? currUser.email : '' %>",
                     },
                     theme: { color: "#007bff" }
                 };
-                
+
                 const rzp1 = new Razorpay(options);
                 rzp1.open();
             } catch (error) {

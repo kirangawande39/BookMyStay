@@ -131,7 +131,13 @@ app.use('/bookings', bookingRoutes);
 app.use("/payment", paymentRoutes);
 
 
+app.get("/payment-success", (req, res) => {
+    res.render("explore-rooms/success.ejs");
+});
 
+app.get("/payment-failed", (req, res) => {
+    res.render("explore-rooms/failed.ejs", { message: "Your transaction could not be completed." });
+});
 app.get("/", (req, res) => {
  
     res.redirect('explore-rooms')
