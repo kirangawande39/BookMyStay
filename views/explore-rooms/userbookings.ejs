@@ -88,7 +88,8 @@
                     return;
                 }
 
-                console.log(data.booking)
+                <!-- console.log(data.booking) -->
+
                 const options = {
                     key: data.key_id, 
                     amount: data.order.amount,
@@ -113,10 +114,11 @@
                             const verifyData = await verifyRes.json();
                             
                             if (verifyData.success) {
-                                <!-- console.log("payment id two"+bookingId) -->
-                                window.location.href = `https://rentspheres.onrender.com//payment-success?bookingId=${bookingId}`;
+                                
+
+                                window.location.href = `https://rentspheres.onrender.com/payment-success?bookingId=${bookingId}`;
                             } else {
-                                window.location.href = "https://rentspheres.onrender.com//payment-failed";
+                                window.location.href = "https://rentspheres.onrender.com/payment-failed";
                             }
                         } catch (error) {
                             console.error("Payment Verification Error:", error);
