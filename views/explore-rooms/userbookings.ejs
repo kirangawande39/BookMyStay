@@ -114,9 +114,9 @@
                             
                             if (verifyData.success) {
                                 <!-- console.log("payment id two"+bookingId) -->
-                                window.location.href = `/payment-success?bookingId=${bookingId}`;
+                                window.location.href = `https://rentspheres.onrender.com//payment-success?bookingId=${bookingId}`;
                             } else {
-                                window.location.href = "/payment-failed";
+                                window.location.href = "https://rentspheres.onrender.com//payment-failed";
                             }
                         } catch (error) {
                             console.error("Payment Verification Error:", error);
