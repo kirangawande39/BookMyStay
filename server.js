@@ -134,7 +134,7 @@ app.use("/payment", paymentRoutes);
 app.get("/payment-success", async (req, res) => {
     try {
         const { bookingId } = req.query;  
-        
+        console.log("payment success:"+bookingId)
         // Booking को Find करके Status को "Paid" में Update करो
         const booking = await Booking.findByIdAndUpdate(
             bookingId,
