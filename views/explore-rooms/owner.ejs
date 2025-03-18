@@ -72,6 +72,8 @@
       <p><strong>Price:</strong> ₹<%= singleData.price %></p>
     </div>
 
+
+
     <!-- Bookings Section -->
     <h3 class="text-center text-danger fw-bold">Bookings</h3>
 
@@ -131,7 +133,37 @@
     <div class="text-center">
       <a href="/explore-rooms" class="btn btn-primary mt-4 px-4 py-2">Back to Listings</a>
     </div>
+    <button onclick="startScanner()">Scan QR Code</button>
+    <div id="qr-reader" style="width: 300px;"></div>
+    <div id="qr-result"></div>
   </div>
+  <script>
+    function startScanner() {
+      let qrScanner = new Html5Qrcode("qr-reader");
+
+      qrScanner.start({
+          facingMode: "environment"
+        }, // Back camera for mobile
+        {
+          fps: 10,
+          qrbox: 250
+        },
+        (decodedText) => {
+          document.getElementById("qr-result").innerHTML = `<p>Scanned: ${decodedText}</p>`;
+          window.location.href = decodedText; // Redirect for verification
+        },
+        (errorMessage) => {
+          console.log(errorMessage); // Log errors
+        }
+      ).catch((err) => {
+        console.log("Camera access denied:", err);
+      });
+    }
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
+
+
+
 
 </body>
 

@@ -157,6 +157,17 @@ app.get("/payment-success", async (req, res) => {
     }
 });
 
+app.get("/owner/verify-booking", async (req, res) => {
+    const { bookingId } = req.query;
+    const booking = await Booking.findById(bookingId);
+    
+    if (booking) {
+        res.send(`<h2 style="color:green;">✅ Booking Verified: ${booking.user.username}</h2>`);
+    } else {
+        res.send(`<h2 style="color:red;">❌ No Booking Found</h2>`);
+    }
+});
+
 
 app.get("/payment-failed", (req, res) => {
     res.render("explore-rooms/failed.ejs", { message: "Your transaction could not be completed." });

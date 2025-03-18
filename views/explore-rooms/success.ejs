@@ -6,6 +6,7 @@
     <title>Payment Successful</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -19,6 +20,7 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
+            position: relative;
         }
         .success-title {
             font-size: 24px;
@@ -28,6 +30,9 @@
         .card {
             text-align: left;
             margin-top: 15px;
+        }
+        .qr-code {
+            margin-top: 20px;
         }
         .btn-container {
             margin-top: 20px;
@@ -78,6 +83,8 @@
         </div>
     </div>
 
+    <div class="qr-code" id="qrcode"></div>
+
     <div class="btn-container">
         <button class="btn-primary" onclick="downloadReceipt()">Download Receipt</button>
         <a href="/explore-rooms" class="btn-secondary">Go to Home</a>
@@ -93,6 +100,15 @@
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { scale: 2 },
             jsPDF: { format: 'a4', orientation: 'portrait' }
+        });
+    }
+
+    // Generate QR Code
+    window.onload = function() {
+        var qrcode = new QRCode(document.getElementById("qrcode"), {
+            text: "https://bookmystay.com/user/<%= booking.user._id %>",
+            width: 128,
+            height: 128
         });
     }
 </script>
