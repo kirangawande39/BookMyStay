@@ -170,7 +170,7 @@ app.get("/owner/verify-booking", async (req, res) => {
                     <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; max-width: 400px;">
                         <h2 style="color: green;">✅ Booking Verified</h2>
                         <p><strong>User:</strong> ${booking.user.username}</p>
-                        <p><strong>Booking ID:</strong> ${booking._id}</p>
+                        <p><strong>Booking Status:</strong> ${booking.status}</p>
                         <p><strong>Property:</strong> ${booking.listing.title}</p>
                         <p><strong>Dates:</strong> ${new Date(booking.startDate).toLocaleDateString()} - ${new Date(booking.endDate).toLocaleDateString()}</p>
                         <button onclick="window.history.back()" style="background: #007bff; color: white; border: none; padding: 10px 20px; margin-top: 15px; border-radius: 5px; cursor: pointer; font-size: 16px;">⬅️ Back</button>
