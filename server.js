@@ -162,7 +162,13 @@ app.get("/owner/verify-booking", async (req, res) => {
     const booking = await Booking.findById(bookingId);
     
     if (booking) {
-        res.send(`<h2 style="color:green;">✅ Booking Verified: ${booking.user.username}</h2>`);
+        res.send(`
+            <h2 style="color:green;">✅ Booking Verified</h2>
+            <p>User: ${booking.user.username}</p>
+            <p>Booking ID: ${booking._id}</p>
+            <p>Property: ${booking.listing.title}</p>
+            <p>Dates: ${new Date(booking.startDate).toLocaleDateString()} - ${new Date(booking.endDate).toLocaleDateString()}</p>
+        `);
     } else {
         res.send(`<h2 style="color:red;">❌ No Booking Found</h2>`);
     }

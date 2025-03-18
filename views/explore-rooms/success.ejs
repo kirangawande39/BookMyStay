@@ -103,14 +103,14 @@
         });
     }
 
-    // Generate QR Code
     window.onload = function() {
         var qrcode = new QRCode(document.getElementById("qrcode"), {
-            text: "https://bookmystay.com/user/<%= booking.user._id %>",
+            text: `https://rentspheres.onrender.com/owner/verify-booking?bookingId=<%= booking._id %>`,  
             width: 128,
             height: 128
         });
-    }
+    };
+    
 </script>
 
 </body>
