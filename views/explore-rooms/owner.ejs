@@ -54,6 +54,9 @@
 <body>
 
   <div class="container">
+    <button onclick="startScanner()">Scan QR Code</button>
+    <div id="qr-reader" style="width: 300px;"></div>
+    <div id="qr-result"></div>
     <h2 class="text-center text-primary fw-bold">Listing & Owner Details</h2>
 
     <!-- Owner Details -->
@@ -135,9 +138,7 @@
     </div>
 
   </div>
-  <button onclick="startScanner()">Scan QR Code</button>
-  <div id="qr-reader" style="width: 300px;"></div>
-  <div id="qr-result"></div>
+
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-qrcode/2.3.8/html5-qrcode.min.js"></script>
   <script>

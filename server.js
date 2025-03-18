@@ -158,21 +158,48 @@ app.get("/payment-success", async (req, res) => {
 });
 
 app.get("/owner/verify-booking", async (req, res) => {
-    const { bookingId } = req.query;
-    const booking = await Booking.findById(bookingId);
-    
-    if (booking) {
-        res.send(`
-            <h2 style="color:green;">✅ Booking Verified</h2>
-            <p>User: ${booking.user.username}</p>
-            <p>Booking ID: ${booking._id}</p>
-            <p>Property: ${booking.listing.title}</p>
-            <p>Dates: ${new Date(booking.startDate).toLocaleDateString()} - ${new Date(booking.endDate).toLocaleDateString()}</p>
+    try {
+        const { bookingId } = req.query;
+        const booking = await Booking.findById(bookingId)
+            .populate("user", "username")
+            .populate("listing", "title");
+
+        if (booking) {
+            res.send(`
+                <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4;">
+                    <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; max-width: 400px;">
+                        <h2 style="color: green;">✅ Booking Verified</h2>
+                        <p><strong>User:</strong> ${booking.user.username}</p>
+                        <p><strong>Booking ID:</strong> ${booking._id}</p>
+                        <p><strong>Property:</strong> ${booking.listing.title}</p>
+                        <p><strong>Dates:</strong> ${new Date(booking.startDate).toLocaleDateString()} - ${new Date(booking.endDate).toLocaleDateString()}</p>
+                        <button onclick="window.history.back()" style="background: #007bff; color: white; border: none; padding: 10px 20px; margin-top: 15px; border-radius: 5px; cursor: pointer; font-size: 16px;">⬅️ Back</button>
+                    </div>
+                </div>
+            `);
+        } else {
+            res.send(`
+                <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4;">
+                    <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; max-width: 400px;">
+                        <h2 style="color: red;">❌ No Booking Found</h2>
+                        <button onclick="window.history.back()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; margin-top: 15px; border-radius: 5px; cursor: pointer; font-size: 16px;">⬅️ Back</button>
+                    </div>
+                </div>
+            `);
+        }
+    } catch (error) {
+        res.status(500).send(`
+            <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4;">
+                <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; max-width: 400px;">
+                    <h2 style="color: red;">⚠️ Error Occurred</h2>
+                    <p>${error.message}</p>
+                    <button onclick="window.history.back()" style="background: #ffc107; color: black; border: none; padding: 10px 20px; margin-top: 15px; border-radius: 5px; cursor: pointer; font-size: 16px;">⬅️ Back</button>
+                </div>
+            </div>
         `);
-    } else {
-        res.send(`<h2 style="color:red;">❌ No Booking Found</h2>`);
     }
 });
+
 
 
 app.get("/payment-failed", (req, res) => {
