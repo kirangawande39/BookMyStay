@@ -97,9 +97,9 @@
 
                             const verifyData = await verifyRes.json();
                             if (verifyData.success) {
-                                window.location.href = "/payment-success";
+                                window.location.href = "/payment/payment-success";
                             } else {
-                                window.location.href = "/payment-failed";
+                                window.location.href = "/payment/payment-failed";
                             }
                         } catch (error) {
                             console.error("Payment Verification Error:", error);

@@ -2,6 +2,7 @@ const express = require("express");
 const crypto = require("crypto");
 const Razorpay = require("razorpay");
 const Booking = require('../models/booking');
+const { route } = require("./listing");
 require("dotenv").config();
 
 const router = express.Router();
@@ -14,7 +15,7 @@ const razorpay = new Razorpay({
 
 // Create Order Route
 
-router.post("/create-order", async (req, res) => {
+router.post("/payment/create-order", async (req, res) => {
     try {
         const { bookingId } = req.body;
         // console.log(bookingId)
@@ -38,7 +39,7 @@ router.post("/create-order", async (req, res) => {
 
 
 // Verify Payment Route
-router.post("/verify-payment", async (req, res) => {
+router.post("/payment/verify-payment", async (req, res) => {
     try {
         const { order_id, payment_id, signature } = req.body;
         const generatedSignature = crypto
@@ -60,6 +61,35 @@ router.post("/verify-payment", async (req, res) => {
 });
 
 
+router.get("/payment-success", async (req, res) => {
+    try {
+        const { bookingId } = req.query;  
+        console.log("payment success:"+bookingId)
+        
+        const booking = await Booking.findByIdAndUpdate(
+            bookingId,
+            { status: "Paid" }, 
+            { new: true } // Updated document return करेगा
+        )
+        .populate("user", "username email")
+        .populate("listing", "title price location")
+        .exec();
+
+        if (!booking) {
+            return res.status(404).send("Booking Not Found!");
+        }
+
+        res.render("explore-rooms/success.ejs", { booking });
+
+    } catch (error) {
+        console.error("Error updating booking status:", error);
+        res.status(500).send("Internal Server Error");
+    }
+});
+
+router.get("/payment-failed", (req, res) => {
+    res.render("explore-rooms/failed.ejs", { message: "Your transaction could not be completed." });
+});
 
 module.exports = router;
 

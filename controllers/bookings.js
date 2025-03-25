@@ -62,14 +62,14 @@ module.exports.getBooking = async (req, res) => {
 };
 
 
-module.exports.renderBookings=async (req, res) => {
+module.exports.renderBookings = async (req, res) => {
     try {
         let listingId = req.params.id;
 
         let singleData = await Listing.findById(listingId)
             .populate({
                 path: "bookings",
-                populate: { path: "user" }  
+                populate: { path: "user" }
             })
             .populate("owner");
 
@@ -78,7 +78,7 @@ module.exports.renderBookings=async (req, res) => {
             return res.redirect("/explore-rooms");
         }
 
-       
+
 
         res.render("explore-rooms/owner.ejs", { singleData });
 
@@ -86,5 +86,80 @@ module.exports.renderBookings=async (req, res) => {
         console.error("Error fetching bookings:", error);
         req.flash("error", "Something went wrong");
         res.redirect("/explore-rooms");
+    }
+}
+
+
+module.exports.bookingverifyresponse = async (req, res) => {
+    try {
+        const { bookingId } = req.query;
+        const booking = await Booking.findById(bookingId)
+            .populate("user", "username")
+            .populate("listing", "title");
+
+        if (booking) {
+            res.send(`
+                    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4;">
+                        <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; max-width: 400px;">
+                            <h2 style="color: green;">✅ Booking Verified</h2>
+                            <p><strong>User:</strong> ${booking.user.username}</p>
+                            <p><strong>Booking Status:</strong> ${booking.status}</p>
+                            <p><strong>Property:</strong> ${booking.listing.title}</p>
+                            <p><strong>Dates:</strong> ${new Date(booking.startDate).toLocaleDateString()} - ${new Date(booking.endDate).toLocaleDateString()}</p>
+                            <button onclick="window.history.back()" style="background: #007bff; color: white; border: none; padding: 10px 20px; margin-top: 15px; border-radius: 5px; cursor: pointer; font-size: 16px;">⬅️ Back</button>
+                        </div>
+                    </div>
+                `);
+        } else {
+            res.send(`
+                    <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4;">
+                        <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; max-width: 400px;">
+                            <h2 style="color: red;">❌ No Booking Found</h2>
+                            <button onclick="window.history.back()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; margin-top: 15px; border-radius: 5px; cursor: pointer; font-size: 16px;">⬅️ Back</button>
+                        </div>
+                    </div>
+                `);
+        }
+    } catch (error) {
+        res.status(500).send(`
+                <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4;">
+                    <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; max-width: 400px;">
+                        <h2 style="color: red;">⚠️ Error Occurred</h2>
+                        <p>${error.message}</p>
+                        <button onclick="window.history.back()" style="background: #ffc107; color: black; border: none; padding: 10px 20px; margin-top: 15px; border-radius: 5px; cursor: pointer; font-size: 16px;">⬅️ Back</button>
+                    </div>
+                </div>
+            `);
+    }
+}
+
+
+module.exports.renderuserbookings = async (req, res) => {
+    try {
+        // If user is not logged in, redirect to login page
+        if (!req.user) {
+            return res.redirect("/login");
+        }
+
+
+
+        // Fetch bookings where user matches the logged-in user's ID
+        const userBookings = await Booking.find({ user: req.user.id })
+            .populate("listing") // Populate listing details
+            .exec();
+
+
+
+        if (userBookings.length === 0) {
+            req.flash("error", "No bookings found for this user.");
+            return res.redirect("/explore-rooms"); // Redirecting to bookings page
+        }
+
+
+        // Render EJS page with the bookings and user details
+        res.render("explore-rooms/userbookings.ejs", { bookings: userBookings, user: req.user });
+    } catch (error) {
+        console.error("Error fetching bookings:", error);
+        res.status(500).send("Server Error");
     }
 }

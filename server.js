@@ -125,86 +125,19 @@ app.use((req, res, next) => {
 app.use("/explore-rooms",listingsRouter);
 app.use("/explore-rooms/:id/reviews",reviewsRouter)
 app.use("/",userRouter)
-app.use('/bookings', bookingRoutes);
+app.use('/', bookingRoutes);
 // app.use("/", paymentRoutes);
 
-app.use("/payment", paymentRoutes);
-
-
-app.get("/payment-success", async (req, res) => {
-    try {
-        const { bookingId } = req.query;  
-        console.log("payment success:"+bookingId)
-        // Booking को Find करके Status को "Paid" में Update करो
-        const booking = await Booking.findByIdAndUpdate(
-            bookingId,
-            { status: "Paid" }, // अपडेट फील्ड
-            { new: true } // Updated document return करेगा
-        )
-        .populate("user", "username email")
-        .populate("listing", "title price location")
-        .exec();
-
-        if (!booking) {
-            return res.status(404).send("Booking Not Found!");
-        }
-
-        res.render("explore-rooms/success.ejs", { booking });
-
-    } catch (error) {
-        console.error("Error updating booking status:", error);
-        res.status(500).send("Internal Server Error");
-    }
-});
-
-app.get("/owner/verify-booking", async (req, res) => {
-    try {
-        const { bookingId } = req.query;
-        const booking = await Booking.findById(bookingId)
-            .populate("user", "username")
-            .populate("listing", "title");
-
-        if (booking) {
-            res.send(`
-                <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4;">
-                    <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; max-width: 400px;">
-                        <h2 style="color: green;">✅ Booking Verified</h2>
-                        <p><strong>User:</strong> ${booking.user.username}</p>
-                        <p><strong>Booking Status:</strong> ${booking.status}</p>
-                        <p><strong>Property:</strong> ${booking.listing.title}</p>
-                        <p><strong>Dates:</strong> ${new Date(booking.startDate).toLocaleDateString()} - ${new Date(booking.endDate).toLocaleDateString()}</p>
-                        <button onclick="window.history.back()" style="background: #007bff; color: white; border: none; padding: 10px 20px; margin-top: 15px; border-radius: 5px; cursor: pointer; font-size: 16px;">⬅️ Back</button>
-                    </div>
-                </div>
-            `);
-        } else {
-            res.send(`
-                <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4;">
-                    <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; max-width: 400px;">
-                        <h2 style="color: red;">❌ No Booking Found</h2>
-                        <button onclick="window.history.back()" style="background: #dc3545; color: white; border: none; padding: 10px 20px; margin-top: 15px; border-radius: 5px; cursor: pointer; font-size: 16px;">⬅️ Back</button>
-                    </div>
-                </div>
-            `);
-        }
-    } catch (error) {
-        res.status(500).send(`
-            <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4;">
-                <div style="background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; max-width: 400px;">
-                    <h2 style="color: red;">⚠️ Error Occurred</h2>
-                    <p>${error.message}</p>
-                    <button onclick="window.history.back()" style="background: #ffc107; color: black; border: none; padding: 10px 20px; margin-top: 15px; border-radius: 5px; cursor: pointer; font-size: 16px;">⬅️ Back</button>
-                </div>
-            </div>
-        `);
-    }
-});
+app.use("/", paymentRoutes);
 
 
 
-app.get("/payment-failed", (req, res) => {
-    res.render("explore-rooms/failed.ejs", { message: "Your transaction could not be completed." });
-});
+
+
+
+
+
+
 app.get("/", (req, res) => {
  
     res.redirect('explore-rooms')
@@ -213,42 +146,10 @@ app.get("/", (req, res) => {
 //     console.log("I am bookings");
 //     console.log(req.params.id)
 // })
-app.get("/mybookings", async (req, res) => {
-    try {
-        // If user is not logged in, redirect to login page
-        if (!req.user) {
-            return res.redirect("/login");
-        }
-
-       
-
-        // Fetch bookings where user matches the logged-in user's ID
-        const userBookings = await Booking.find({ user: req.user.id })
-            .populate("listing") // Populate listing details
-            .exec();
-
-       
-      
-            if (userBookings.length === 0) {
-                req.flash("error", "No bookings found for this user.");
-                return res.redirect("/explore-rooms"); // Redirecting to bookings page
-            }
-        
-
-        // Render EJS page with the bookings and user details
-        res.render("explore-rooms/userbookings.ejs", { bookings: userBookings, user: req.user });
-    } catch (error) {
-        console.error("Error fetching bookings:", error);
-        res.status(500).send("Server Error");
-    }
-});
 
 
-app.post('/update-booking/:id', async (req, res) => {
-    const { status } = req.body;
-    await Booking.updateOne({ _id: req.params.id }, { $set: { status } });
-    res.redirect('back'); // Same page pe redirect hoga
-});
+
+
 
 // app.get("/payment", (req, res) => {
 //     // console.log("hello i am payment page")
