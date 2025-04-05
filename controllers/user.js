@@ -6,6 +6,7 @@ module.exports.renderSignupForm=(req, res) => {
     res.render("./users/singup.ejs");
 }
 
+
 module.exports.saveSingupForm=async (req, res,next) => {
     try {
 

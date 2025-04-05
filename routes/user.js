@@ -17,12 +17,11 @@ router.route("/login")
 .get(ListingController.renderLoginForm)
 
 .post(saveRedirectUrl,
-     passport.authenticate("local", {
-   
+    passport.authenticate("local", {
     failureRedirect:"/login",
     failureFlash:true,
 }),
- ListingController.checkLoginAuthintication);
+ListingController.checkLoginAuthintication);
 
 
  

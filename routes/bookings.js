@@ -3,7 +3,7 @@ const router = express.Router();
 const wrapeAsync = require("../utils/wrapeAsync.js");
 const { userLoggedIn, validateBooking } = require('../middleware.js');
 const BookingControllers = require("../controllers/bookings.js");
-
+const Booking=require("../models/booking.js")
 
 // router.route('/:id/book')
 //     .post(userLoggedIn,validateBooking, wrapeAsync(BookingControllers.getBooking));
@@ -23,6 +23,7 @@ router.route("/mybookings")
     
 router.post('/update-booking/:id', async (req, res) => {
     const { status } = req.body;
+    // console.log("Status:"+status)
     await Booking.updateOne({ _id: req.params.id }, { $set: { status } });
     res.redirect('back'); // Same page pe redirect hoga
 });
