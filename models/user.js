@@ -9,7 +9,14 @@ const userSchema = new Schema({
         type: String,
         required: true
     },
-   
+    otp: String,
+    otpExpiration: Date,
+    isVerified: {
+        type: Boolean,
+        default: false
+    }
+
+
 });
 
 userSchema.plugin(passportLocalMongoose);

@@ -167,28 +167,31 @@ body {
 
 
   /* bookings */
+  .booking-form {
+    border-radius: 20px;
+    background: #ffffff;
+    padding: 30px;
+    max-width: 600px;
+    margin: 0 auto;
+    transition: transform 0.3s ease-in-out;
+  }
+
+  .booking-form:hover {
+    transform: translateY(-5px);
+  }
+
+  @media screen and (max-width: 768px) {
+    .booking-form {
+      padding: 20px;
+    }
+
+    .btn-lg {
+      font-size: 1rem;
+      padding: 10px;
+    }
+  }
 
 
-.booking-form {
-    margin-top: 20px;
-    padding: 15px;
-    background: #f9f9f9;
-    border-radius: 5px;
-  }
-  .booking-form input {
-    display: block;
-    margin-bottom: 10px;
-    width: 100%;
-    padding: 8px;
-  }
-  .booking-form button {
-    background: #3498db;
-    color: white;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    cursor: pointer;
-  }
   
   /* Smooth fade-in animation */
 @keyframes fadeIn {

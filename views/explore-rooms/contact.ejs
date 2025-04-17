@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Contact Us - BookMyStay</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+  <script>
+    (function () {
+      emailjs.init("tsg_InKx5zF2PHZxd"); // Replace with your EmailJS Public Key
+    })();
+  </script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 40px 0;
+    }
+    .container {
+      max-width: 600px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      margin-top: 20px;
+      background: #458500;
+      color: white;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #356900;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Contact Us</h2>
+    <form id="contact-form">
+      <!-- ✅ Dynamic hidden email for recipient -->
+      <input type="hidden" name="to_email" value="<%= booking.user.email %>" />
+
+      <label for="name">Name</label>
+      <input type="text" name="user_name" id="name" value="<%= booking.user.username %>" required />
+
+      <label for="email">Email</label>
+      <input type="email" name="user_email" id="email" value="<%= booking.user.email %>" required />
+
+      <label for="email">Price</label>
+      <input type="number" name="price" id="email" value="<%= booking.totalPrice %>" required />
+
+
+    <button type="submit">Send Message</button>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("contact-form").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      emailjs
+        .sendForm("service_n6tispg", "template_ysmu9b9", this)
+        .then(() => {
+          alert("Confirmation email sent to your inbox!");
+          this.reset();
+        })
+        .catch((error) => {
+          console.error("Email sending failed:", error);
+          alert("Something went wrong. Please try again.");
+        });
+    });
+  </script>
+</body>
+</html>

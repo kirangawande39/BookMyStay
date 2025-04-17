@@ -1,11 +1,9 @@
 <% layout('/layouts/boilerplate') -%>
 
 <style>
- 
   body {
-   background-color: white;
+    background-color: white;
     height: 100vh;
-   
     margin: 0;
     font-family: 'Roboto', sans-serif;
   }
@@ -48,8 +46,48 @@
     box-shadow: 0 0 5px rgba(110, 142, 251, 0.5);
   }
 
+  .email-wrapper {
+    position: relative;
+  }
+
+  .email-wrapper input {
+    padding-right: 110px;
+  }
+
+  .email-wrapper button {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .email-wrapper button:hover {
+    background-color: #0056b3;
+  }
+
+  .verified-label {
+    position: absolute;
+    top: 50%;
+    right: 5px;
+    transform: translateY(-50%);
+    background-color: #28a745;
+    color: white;
+    padding: 6px 12px;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    white-space: nowrap;
+  }
+
   button {
-     background-color: blue;
+    background-color: blue;
     border: none;
     padding: 0.75rem;
     border-radius: 8px;
@@ -58,6 +96,10 @@
     cursor: pointer;
     transition: all 0.3s ease;
   }
+  .btn{
+    background-color: blue !important;
+    color: white !important;
+  }
 
   button:hover {
     background: linear-gradient(45deg, #345cec, #1e4eeb);
@@ -65,78 +107,142 @@
     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
   }
 
-  /* Animations */
+  .signin-link {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.95rem;
+  }
+
+  .signin-link a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .signin-link a:hover {
+    text-decoration: underline;
+  }
+
   @keyframes fadeIn {
     from {
       opacity: 0;
       transform: translateY(-10px);
     }
+
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
 </style>
+
 <body>
   <div class="container">
     <div class="form-container">
       <h2 class="text-center mb-4">Signup</h2>
-      <form id="signupForm" action="/signup" method="POST" class="needs-validation" novalidate>
+
+      <form id="signupForm" class="needs-validation" action="/signup" method="POST" novalidate>
         <!-- Email -->
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            name="email"
-            placeholder="Enter your email"
-            required
-          >
-          <div class="invalid-feedback">
-            Please provide a valid email address.
+          <div class="email-wrapper">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+            <button type="button" id="sendVerification">Verify</button>
           </div>
+          <div class="invalid-feedback">Please provide a valid email address.</div>
         </div>
 
         <!-- Username -->
         <div class="mb-3">
           <label for="username" class="form-label">Username</label>
-          <input
-            type="text"
-            class="form-control"
-            id="username"
-            name="username"
-            placeholder="Choose a username"
-            required
-          >
-          <div class="invalid-feedback">
-            Please provide a username.
-          </div>
+          <input type="text" class="form-control" id="username" name="username" placeholder="Choose a username" required>
+          <div class="invalid-feedback">Please provide a username.</div>
         </div>
 
         <!-- Password -->
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
-          <input
-            type="password"
-            class="form-control"
-            id="password"
-            name="password"
-            placeholder="Enter a secure password"
-            required
-            minlength="6"
-          >
-          <div class="invalid-feedback">
-            Password must be at least 6 characters long.
-          </div>
+          <input type="password" class="form-control" id="password" name="password" placeholder="Enter a secure password" required minlength="6">
+          <div class="invalid-feedback">Password must be at least 6 characters long.</div>
         </div>
 
-        <!-- Submit -->
-        <button class="btn btn-primary w-100">Sign Up</button>
-        <br><br>
-        <button type="submit" class="btn btn-primary w-100"><a 
-         style="text-decoration: none; color:white;" href="/login">Sign In</a></button>
+        <!-- OTP Input -->
+        <div id="otpInputWrapper" class="mb-3" style="display: none">
+          <label for="otpInput" class="form-label">Enter OTP</label>
+          <input type="text" class="form-control" id="otpInput" placeholder="Enter OTP from your email" required>
+          <button type="button" id="verifyOtpBtn" class="btn btn-primary mt-2">Verify OTP</button>
+        </div>
+
+        <!-- Submit Button -->
+        <button type="submit" id="signupSubmit" class="btn  w-100" disabled>Sign Up</button>
+
+        <!-- Already have account -->
+        <div class="signin-link">
+          Already have an account?
+          <a href="/login">Sign in</a>
+        </div>
       </form>
     </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+  <script>
+    emailjs.init('43awkqrLiEnLo5kT9'); // Replace with your EmailJS public key
+
+    let generatedOTP = null;
+    let isEmailVerified = false;
+
+    const sendVerification = document.getElementById("sendVerification");
+    const verifyOtpBtn = document.getElementById("verifyOtpBtn");
+
+    sendVerification.addEventListener("click", async () => {
+      const email = document.getElementById("email").value;
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+
+      if (!email || !username || !password) {
+        alert("Please fill all fields before sending verification.");
+        return;
+      }
+
+      generatedOTP = Math.floor(100000 + Math.random() * 900000);
+      const expiry = new Date(Date.now() + 15 * 60000).toLocaleTimeString();
+
+      try {
+        await emailjs.send("service_pc8z9ob", "template_51ns2kc", {
+          to_email: email,
+          passcode: generatedOTP,
+          time: expiry,
+        });
+
+        alert("OTP sent to your email!");
+        document.getElementById("otpInputWrapper").style.display = "block";
+      } catch (err) {
+        console.error("EmailJS send error:", err);
+        alert("Failed to send OTP.");
+      }
+    });
+
+    verifyOtpBtn.addEventListener("click", function () {
+      const userInput = document.getElementById("otpInput").value;
+      if (userInput == generatedOTP) {
+        alert("OTP verified! You can now sign up.");
+        document.getElementById("signupSubmit").disabled = false;
+        isEmailVerified = true;
+
+        const emailInput = document.getElementById("email");
+        emailInput.readOnly = true;
+
+        const btn = document.getElementById("sendVerification");
+        btn.remove();
+
+        const label = document.createElement("div");
+        label.classList.add("verified-label");
+        label.textContent = "Verified ✅";
+        document.querySelector(".email-wrapper").appendChild(label);
+      } else {
+        alert("Incorrect OTP. Please try again.");
+      }
+    });
+  </script>
 </body>

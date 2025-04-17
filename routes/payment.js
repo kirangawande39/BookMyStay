@@ -80,6 +80,7 @@ router.get("/payment-success", async (req, res) => {
         }
 
         res.render("explore-rooms/success.ejs", { booking });
+        // res.render("explore-rooms/contact.ejs",{booking});
 
     } catch (error) {
         console.error("Error updating booking status:", error);

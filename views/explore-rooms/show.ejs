@@ -38,23 +38,35 @@
 
 
      <% if (currUser && !currUser._id.equals(singleData.owner._id)) { %>
-     <div class="booking-form">
-       <h2>Book This Listing</h2>
-       <form action="/bookings/<%= singleData._id %>/book" method="POST">
-         <label for="startDate">Start Date:</label>
-         <input type="date" id="startDate" name="startDate" required>
-
-         <label for="endDate">End Date:</label>
-         <input type="date" id="endDate" name="endDate" required>
-
-         <button type="submit" class="btn btn-primary">Book Now</button>
-       </form>
-     </div>
-     <% } else if (!currUser) { %>
-     <p class="text-center">
-       <a href="/login" class="btn btn-primary">Log in</a> to book this listing.
-     </p>
-     <% } %>
+  <div class="container mt-5">
+    <div class="card shadow booking-form animate__animated animate__fadeInUp">
+      <div class="card-body">
+        <h3 class="card-title mb-4 text-center text-primary fw-bold">Book This Listing</h3>
+        <form action="/bookings/<%= singleData._id %>/book" method="POST">
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="startDate" class="form-label">Start Date</label>
+              <input type="date" id="startDate" name="startDate" class="form-control" required>
+            </div>
+            <div class="col-md-6">
+              <label for="endDate" class="form-label">End Date</label>
+              <input type="date" id="endDate" name="endDate" class="form-control" required>
+            </div>
+          </div>
+          <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-success btn-lg">Book Now</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+<% } else if (!currUser) { %>
+  <div class="container mt-5 text-center animate__animated animate__fadeIn">
+    <p class="fs-5">You need to be logged in to book this listing.</p>
+    <a href="/login" class="btn btn-primary btn-lg">Log In to Book</a>
+  </div>
+<% } %>
+   
    </div>
    <div class="containerr">
      <hr>

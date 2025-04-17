@@ -5,6 +5,8 @@ if(process.env.NODE_ENV != "production"){
 // Importing Express to create an HTTP server.
 const express = require('express'); 
 
+
+const crypto = require("crypto");
 // Importing Mongoose to connect with MongoDB.
 const mongoose = require('mongoose'); 
 const razorpay=require('razorpay')
@@ -164,9 +166,47 @@ app.get("/terms",(req,res)=>{
     res.render("explore-rooms/terms.ejs");
 })
 
-app.listen(port, () => {
-    console.log(`Listining port is ${port}`);
-})
+
+app.post("/send-otp", async (req, res) => {
+  const { email, username, password } = req.body;
+
+  const otp = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit OTP
+  const otpExpiration = Date.now() + 5 * 60 * 1000; // 5 minutes
+
+  let user = await User.findOne({ email });
+
+  if (!user) {
+    user = new User({ email, username, password }); // hash password later
+  }
+
+  user.otp = otp;
+  user.otpExpiration = otpExpiration;
+  await user.save();
+
+  // Respond to frontend to trigger EmailJS
+  res.json({ success: true, otp }); // Don't send this in production!
+});
+
+
+app.post("/verify-otp", async (req, res) => {
+  const { email, otp } = req.body;
+
+  const user = await User.findOne({ email });
+
+  if (!user || user.otp !== otp || user.otpExpiration < Date.now()) {
+    return res.status(400).json({ success: false, message: "Invalid or expired OTP." });
+  }
+
+  user.isVerified = true;
+  user.otp = undefined;
+  user.otpExpiration = undefined;
+  await user.save();
+
+  res.json({ success: true, message: "Email verified successfully!" });
+});
+
+
+  
 
 
 //Not Existing route Error
@@ -181,3 +221,7 @@ app.use((err, req, res, next) => {
     // res.status(statusCode).render("explore-rooms/error.ejs",{ErrorMsg});
 })
 
+
+app.listen(port, () => {
+    console.log(`Listining port is ${port}`);
+})
