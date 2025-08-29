@@ -101,7 +101,6 @@ passport.use(new LocalStrategy(User.authenticate()));
 
 // const mongodburl = 'mongodb://127.0.0.1:27017/restro_book';
 
-
 Main()
 .then(() => {
     console.log("Connected to DB");
@@ -128,8 +127,6 @@ app.use("/explore-rooms",listingsRouter);
 app.use("/explore-rooms/:id/reviews",reviewsRouter)
 app.use("/",userRouter)
 app.use('/', bookingRoutes);
-// app.use("/", paymentRoutes);
-
 app.use("/", paymentRoutes);
 
 
@@ -186,6 +183,7 @@ app.post("/send-otp", async (req, res) => {
   // Respond to frontend to trigger EmailJS
   res.json({ success: true, otp }); // Don't send this in production!
 });
+
 
 
 app.post("/verify-otp", async (req, res) => {

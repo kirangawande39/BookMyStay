@@ -4,8 +4,8 @@ const Listing=require("../models/listing.js");
 
 
 // const mongodburl = 'mongodb://127.0.0.1:27017/restro_book';
-// let mongodb_url=process.env.MONGODB_URL;
-let url='mongodb+srv://kirangawande9307:sgIOqeGNf2DwZkLo@register.7bnjg.mongodb.net/rentSphere';
+let url=process.env.MONGODB_URL;
+
 Main()
     .then(() => {
         console.log("Connected to DB");

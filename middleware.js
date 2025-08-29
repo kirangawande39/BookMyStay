@@ -2,9 +2,10 @@
 const Listing=require("./models/listing")
 const Review=require("./models/review")
 const { listingSchema } = require("./schema.js")
-const ExpressError = require("./utils/ExpressError.js")
 const { reviewSchema } = require("./schema.js")
 const { bookingSchema } = require("./schema.js")
+
+const ExpressError = require("./utils/ExpressError.js")
 
 //check use Login 
 module.exports.userLoggedIn=(req,res,next)=>{
@@ -41,6 +42,8 @@ module.exports.isOwner=async(req,res,next)=>{
 // Listing Validation Middleware 
  module.exports.validateListing = (req, res, next) => {
     let { error } = listingSchema.validate(req.body);
+
+   // throw error 
     if (error) {
         const errorMessage = error.details.map(detail => detail.message).join(', ');
         throw new ExpressError(400, errorMessage);

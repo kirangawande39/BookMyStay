@@ -38,20 +38,24 @@ router.post("/payment/create-order", async (req, res) => {
 });
 
 
-// Verify Payment Route
+
+
 router.post("/payment/verify-payment", async (req, res) => {
     try {
         const { order_id, payment_id, signature } = req.body;
+
+        // Generate signature using Razorpay secret
         const generatedSignature = crypto
             .createHmac("sha256", process.env.RAZORPAY_SECRET)
             .update(order_id + "|" + payment_id)
             .digest("hex");
 
-        if (generatedSignature) {
-            // console.log("✅ Payment Verified Successfully");
+        // Compare signatures
+        if (generatedSignature === signature) {
+            console.log("Payment Verified Successfully");
             return res.json({ success: true, message: "Payment verified successfully" });
         } else {
-            // console.error("❌ Payment Verification Failed: Signature mismatch");
+            console.error("Payment Verification Failed: Signature mismatch");
             return res.status(400).json({ success: false, message: "Signature mismatch" });
         }
     } catch (error) {
@@ -64,7 +68,7 @@ router.post("/payment/verify-payment", async (req, res) => {
 router.get("/payment-success", async (req, res) => {
     try {
         const { bookingId } = req.query;  
-        console.log("payment success:"+bookingId)
+        // console.log("payment success:"+bookingId)
         
         const booking = await Booking.findByIdAndUpdate(
             bookingId,

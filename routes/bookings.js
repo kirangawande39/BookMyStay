@@ -7,6 +7,7 @@ const Booking=require("../models/booking.js")
 
 // router.route('/:id/book')
 //     .post(userLoggedIn,validateBooking, wrapeAsync(BookingControllers.getBooking));
+
 router.route('/bookings/:id/book')
     .post(userLoggedIn, wrapeAsync(BookingControllers.getBooking));
 
@@ -21,7 +22,7 @@ router.route("/owner/verify-booking")
 router.route("/mybookings")
     .get(userLoggedIn, wrapeAsync(BookingControllers.renderuserbookings));
     
-router.post('/update-booking/:id', async (req, res) => {
+router.post('/update-booking/:id', userLoggedIn, async (req, res) => {
     const { status } = req.body;
     // console.log("Status:"+status)
     await Booking.updateOne({ _id: req.params.id }, { $set: { status } });
